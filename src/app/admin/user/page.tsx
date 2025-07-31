@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import UserForm from "../Admin_components/Admin_EditUser";
+import Cookies from "js-cookie";
 
 export default function Admin_UseEditUser() {
     const DOMAIN = process.env.NEXT_PUBLIC_HOSTDOMAIN;
@@ -12,7 +13,7 @@ export default function Admin_UseEditUser() {
 
     const fetchUsers = async () => {
         try {
-            const token = localStorage.getItem("token");
+            const token = Cookies.get("token");
             const res = await axios.get(`${DOMAIN}/api/user`, {
                 headers: {
                     Authorization: `Bearer ${token}`
