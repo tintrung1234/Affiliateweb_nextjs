@@ -15,6 +15,7 @@ interface Product {
     views: number;
     rating: number;
     imageUrl: string;
+    URL: string;
 }
 
 export default function ProductRelate({ categoryName }: { categoryName: string }) {
@@ -38,7 +39,7 @@ export default function ProductRelate({ categoryName }: { categoryName: string }
         };
 
         fetchAllProducts();
-    }, []);
+    }, [DOMAIN, categoryName]);
 
 
     return (
@@ -51,9 +52,7 @@ export default function ProductRelate({ categoryName }: { categoryName: string }
                             className="flex flex-col w-[calc(1/4vw/2-1rem)] space-x-4 mb-2 cursor-pointer border border-gray-300 p-2 hover:shadow-lg transition-shadow duration-300"
                             data-aos="fade-right"
                             key={index}
-                        // onClick={() => {
-                        //   handleProductsDetailClick(Product._id);
-                        // }}
+                            onClick={() => window.open(Product.URL, "_blank")}
                         >
                             <div className="w-full h-20 relative bg-gray-100 flex items-center justify-center text-sm text-gray-500">
                                 {Product.imageUrl ? (

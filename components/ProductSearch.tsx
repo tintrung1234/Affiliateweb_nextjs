@@ -1,8 +1,5 @@
 'use client'
 
-import { useRouter } from "next/navigation";
-import { IoMdHeartEmpty } from "react-icons/io";
-import { IoMdHeart } from "react-icons/io";
 import { ToastContainer } from "react-toastify";
 import Image from "next/image";
 import ToggleFavorite from "./toggleFavoriteProduct";
@@ -14,15 +11,10 @@ interface ProductProps {
   title: string;
   price: number | string;
   imageUrl: string;
+  URL: string
 }
 
-const Products = ({ id, category, title, price, imageUrl }: ProductProps) => {
-  const router = useRouter();
-
-  const handleDetailClick = (id: string) => {
-    router.push(`/detail/${encodeURIComponent(id)}`);
-  };
-
+const Products = ({ id, category, title, price, imageUrl, URL }: ProductProps) => {
   return (
     <div
       className="flex flex-col space-x-4 mb-6 cursor-pointer border border-gray-300 p-2 transition-shadow duration-300"
@@ -31,9 +23,7 @@ const Products = ({ id, category, title, price, imageUrl }: ProductProps) => {
       <ToastContainer />
       <div className="overflow-hidden w-full">
         <div className="relative w-full h-64 rounded-xl overflow-hidden bg-gray-100"
-          onClick={() => {
-            handleDetailClick(id);
-          }}
+          onClick={() => window.open(URL, "_blank")}
         >
           {imageUrl ? (
             <Image

@@ -14,6 +14,7 @@ interface Product {
   description: string;
   price: number | string;
   imageUrl: string;
+  URL: string;
 }
 
 interface SearchBoxProps {
@@ -47,11 +48,11 @@ const SearchBox: React.FC<SearchBoxProps> = ({
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && query.trim()) {
-      if(searchEndpoint == '/api/products/search') {
+      if (searchEndpoint == '/api/products/search') {
         router.push(`/search/${encodeURIComponent(query)}`);
         setQuery('');
         setShowResults(false);
-      }else {
+      } else {
         router.push(`/searchPost/${encodeURIComponent(query)}`);
         setQuery('');
         setShowResults(false);
@@ -119,9 +120,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
             <div
               key={product._id}
               className="p-3 hover:bg-gray-100 flex cursor-pointer border-b border-gray-200 last:border-none"
-              onClick={() => {
-                window.location.href = `/product/${product._id}`;
-              }}
+              onClick={() => window.open(product.URL, "_blank")}
             >
               {product.imageUrl ? (
                 <div className='relative w-16 h-16'>

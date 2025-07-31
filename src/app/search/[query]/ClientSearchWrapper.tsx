@@ -2,9 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import Products from "../../../../components/ProductSearch";
-import axios from "axios";
-// import BlogSkeleton from "../components/BlogSkeleton";
-import { toast } from "react-toastify";
 import arrow from "../../../../public/assets/img/left.png"
 import ToggleFavoritePost from "../../../../components/toggleFavoritePost";
 import Image from "next/image";
@@ -25,6 +22,7 @@ interface ProductType {
   category: string;
   price: number;
   imageUrl: string;
+  URL: string;
 }
 
 export default function SearchWrapperClient({
@@ -103,6 +101,7 @@ export default function SearchWrapperClient({
                     title={Product.title}
                     price={Product.price}
                     imageUrl={Product.imageUrl}
+                    URL={Product.URL}
                   />
                 ))}
 
@@ -151,9 +150,6 @@ export default function SearchWrapperClient({
                   data-aos="fade-right"
                   onClick={() => (window.location.href = `/detail/${encodeURIComponent(Post._id)}`)}
                   key={index}
-                // onClick={() => {
-                //   handlePostsDetailClick(Post._id);
-                // }}
                 >
                   {/* <div className={`${type === "post" ? 'h-full' : 'h-20'}`}> */}
                   <div className="relative h-20 w-full rounded overflow-hidden">

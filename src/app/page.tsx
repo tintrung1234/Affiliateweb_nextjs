@@ -13,6 +13,7 @@ interface Product {
     views: number;
     rating: number;
     imageUrl: string;
+    URL: string;
 }
 
 interface Category {
@@ -59,8 +60,6 @@ export default async function Home() {
         }
     }
 
-    console.log(productsByCategory)
-
     let top2Products: Product[] = [];
     try {
         const response = await fetch(`${DOMAIN}/api/products/top2product`);
@@ -92,7 +91,10 @@ export default async function Home() {
             <div className='max-w-[90vw] mx-auto mb-10'>
 
                 {/* product by category session */}
-                <ScrollProduct categories={categories} productsByCategory={productsByCategory} />
+                <ScrollProduct
+                    categories={categories || []}
+                    productsByCategory={productsByCategory || {}}
+                />
 
                 {/* Top discount weekly */}
                 <div className='mt-15 px-5 flex items-center'
@@ -104,44 +106,62 @@ export default async function Home() {
                     <h1 className='font-bold text-black text-[30px]'>TOP GIẢM GIÁ HÀNG TUẦN</h1>
                 </div>
 
-                <div className='flex px-5 mb-10 mt-3  justify-between gap-2' data-aos="fade-up">
+                <div className="flex flex-wrap px-5 mb-10 mt-3 justify-center gap-4" data-aos="fade-up">
                     {/* product */}
-                    {top2Products.map(Products => {
+                    {top2Products.map((product) => {
                         return (
                             <div
-                                key={Products._id}
-                                className='relative border border-black outline w-full sm:w-[calc(97vw/2-2rem)] justify-between rounded-[25px] cursor-pointer'>
-                                <div className='relative w-full h-[40vh]'>
+                                key={product._id}
+                                className="
+          relative border border-black rounded-[25px] cursor-pointer 
+          w-full sm:w-[calc(50%-1rem)] lg:w-[calc(50%-1rem)]
+          flex flex-col
+        "
+                            >
+                                <div className="relative w-full h-[40vh]">
                                     <Image
-                                        src={Products.imageUrl}
+                                        src={product.imageUrl}
                                         fill
                                         className="object-cover rounded-tl-[25px] rounded-tr-[25px]"
-                                        alt={Products.title}
+                                        alt={product.title}
                                     />
                                 </div>
-                                <div className='flex sm:flex-row flex-col justify-between px-4 items-center mt-3 mb-2'>
-                                    <div className='flex'>
-                                        <h2 className='text-gray-400 font-bold text-sm sm:text-base mr-2'>Views:</h2>
-                                        <h2 className='text-gray-400 font-bold text-sm sm:text-base'>{Products.views || 1246}</h2>
+
+                                <div className="flex sm:flex-row flex-col justify-between px-4 items-center mt-3 mb-2">
+                                    <div className="flex">
+                                        <h2 className="text-gray-400 font-bold text-sm sm:text-base mr-2">Views:</h2>
+                                        <h2 className="text-gray-400 font-bold text-sm sm:text-base">
+                                            {product.views || 1246}
+                                        </h2>
                                     </div>
-                                    <div className='flex items-center'>
-                                        <Image src="assets/img/ic_star.png" alt='start icon' width={42} height={44} className='object-cover sm:w-8 sm:h-8' />
-                                        <h2 className='text-black font-bold text-base sm:text-lg'>{Products.rating || 5}</h2>
+                                    <div className="flex items-center">
+                                        <Image
+                                            src="assets/img/ic_star.png"
+                                            alt="start icon"
+                                            width={32}
+                                            height={32}
+                                            className="object-cover sm:w-8 sm:h-8"
+                                        />
+                                        <h2 className="text-black font-bold text-base sm:text-lg">{product.rating || 5}</h2>
                                     </div>
                                 </div>
-                                <div className='px-4'>
-                                    <ToggleFavorite
-                                        productId={Products._id}
-                                        productTitle={Products.title} />
+
+                                <div className="px-4">
+                                    <ToggleFavorite productId={product._id} productTitle={product.title} />
                                 </div>
+
                                 <div className="font-bold flex sm:flex-row flex-col text-sm sm:text-base mt-1 px-4 mb-3">
                                     <p className="mr-2 text-black">Giá tiền:</p>
-                                    <p className="text-red-500">{Number(Products.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                                    <p className="text-red-500">
+                                        {Number(product.price).toLocaleString("vi-VN", {
+                                            style: "currency",
+                                            currency: "VND",
+                                        })}
+                                    </p>
                                 </div>
                             </div>
-                        )
+                        );
                     })}
-
                 </div>
             </div>
         </div>

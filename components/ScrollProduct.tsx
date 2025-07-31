@@ -16,15 +16,18 @@ interface Product {
     views: number;
     rating: number;
     imageUrl: string;
+    URL: string;
 }
 
 interface ScrollProductProps {
-    categories: Category[];
-    productsByCategory: Record<string, Product[]>;
+    categories?: Category[]; // cho phép undefined
+    productsByCategory?: Record<string, Product[]>; // cho phép undefined
 }
 
-export default function ScrollProduct({ categories, productsByCategory }: ScrollProductProps) {
-    // cón
+export default function ScrollProduct({
+    categories = [], // fallback mảng rỗng
+    productsByCategory = {}, // fallback object rỗng
+}: ScrollProductProps) {
     const scrollRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
     const scrollLeft = (key: string) => {
@@ -41,11 +44,21 @@ export default function ScrollProduct({ categories, productsByCategory }: Scroll
         });
     };
 
-    return (
-        <>
-            {/* Category */}
-            {categories && (
-                categories.map((category, idx) => (
+    // Nếu không có category thì không render gì
+    if (categories.length === 0) {
+        return <p className="text-center text-gray-500">Không có sản phẩm để hiển thị</p>;
+    }
+    
+    
+   return (
+    <>
+        {categories.map((category, idx) => {
+            const catTitle = category?.title ?? "";
+            const products = Array.isArray(productsByCategory?.[catTitle])
+                ? productsByCategory[catTitle]
+                : [];
+
+            return (
                     <div key={idx} className='px-5 mb-10'
                         data-aos="fade-right"
                         data-aos-duration="1000"
@@ -89,7 +102,7 @@ export default function ScrollProduct({ categories, productsByCategory }: Scroll
 
                                             <div className="overflow-hidden rounded-[25px]">
                                                 {product.imageUrl ? (
-                                                    <div className="relative sm:h-56 lg:h-64 rounded-[25px] overflow-hidden">
+                                                    <div className="relative h-56 rounded-[25px] overflow-hidden">
                                                         <Image
                                                             src={product.imageUrl}
                                                             alt={product.title}
@@ -98,7 +111,7 @@ export default function ScrollProduct({ categories, productsByCategory }: Scroll
                                                             className="object-cover hover:scale-110 transition-transform duration-300"
                                                         />
                                                     </div>) : (
-                                                    <div className="sm:h-56 lg:h-64 bg-gray-200 flex items-center justify-center rounded-[25px]">
+                                                    <div className=" h-64 bg-gray-200 flex items-center justify-center rounded-[25px]">
                                                         <span className="text-gray-500 text-sm">Không có ảnh</span>
                                                     </div>
                                                 )}
@@ -112,7 +125,8 @@ export default function ScrollProduct({ categories, productsByCategory }: Scroll
                                                 <p className="text-red-500">{Number(product.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
                                             </div>
                                             <div className='flex items-center mt-4 px-2'>
-                                                <button type="button" className="w-full text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium cursor-pointer text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 rounded-lg dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Mua Ngay</button>
+                                                <button type="button" className="w-full text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium cursor-pointer text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 rounded-lg dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+                                                    onClick={() => window.open(product.URL, "_blank")}>Mua Ngay</button>
                                             </div>
                                         </div>
                                     );
@@ -125,7 +139,7 @@ export default function ScrollProduct({ categories, productsByCategory }: Scroll
                             >Xem tất cả</a>
                         </div>
                     </div>
-                )))}
-        </>
-    )
-}
+            );
+        })}
+    </>
+);}

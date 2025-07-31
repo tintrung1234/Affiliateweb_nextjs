@@ -50,11 +50,18 @@ export default function TaiKhoan() {
     const [token, setToken] = useState<string | null>(null);
 
     useEffect(() => {
-        const rawUser = localStorage.getItem('user');
-        const userData = rawUser ? JSON.parse(rawUser) : null;
-        setUser(userData);
-        const storedToken = localStorage.getItem('token');
-        setToken(storedToken);
+        const rawUser = Cookies.get('user');
+        try {
+            const decodedUser = rawUser ? decodeURIComponent(rawUser) : null;
+            const userData = decodedUser ? JSON.parse(decodedUser) : null;
+            setUser(userData);
+        } catch (err) {
+            console.error('Error decoding or parsing user cookie:', err);
+            setUser(null);
+        }
+
+        const storedToken = Cookies.get('token');
+        setToken(storedToken ?? null);
     }, []);
 
     const [oldPassword, setOldPassword] = useState('');
@@ -164,10 +171,11 @@ export default function TaiKhoan() {
     }, [showUpdateForm]);
 
     axios.interceptors.request.use((config) => {
-        const t = localStorage.getItem('token');
+        const t = Cookies.get('token');
+        console.log("token:", t)
         if (!t || isTokenExpired(t)) {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
+            Cookies.remove('token');
+            Cookies.remove('user');
             toast.error("Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.");
             window.location.href = "/login";
             throw new axios.Cancel("Token expired");

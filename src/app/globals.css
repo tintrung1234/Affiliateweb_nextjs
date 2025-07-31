@@ -151,12 +151,6 @@ body {
 
 /* navbar */
 
-.navbar {
-  background-color: #1a202c;
-  color: #ffffff;
-  box-sizing: border-box;
-}
-
 .squares {
   background-color: rgba(26, 32, 44, 0.95);
   backdrop-filter: blur(10px);

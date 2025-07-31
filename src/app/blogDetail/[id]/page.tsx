@@ -47,7 +47,7 @@ export async function generateMetadata({
   const post = await res.json();
 
   const postUrl = `${process.env.NEXT_PUBLIC_URLWEBSITE}/blogDetail/${id}`;
-  const postDescription = post.description?.replace(/<[^>]+>/g, "").slice(0, 160);
+  // const postDescription = post.description?.replace(/<[^>]+>/g, "").slice(0, 160);
 
   return {
     title: post.title,
@@ -60,7 +60,7 @@ export async function generateMetadata({
       type: "article",
       siteName: "Tên trang web của bạn",
       images: post.imageUrl
-        ? [{ url: `${DOMAIN}${post.imageUrl}`, width: 1200, height: 630, alt: post.title }]
+        ? [{ url: `${post.imageUrl}`, width: 1200, height: 630, alt: post.title }]
         : [],
     },
     twitter: {

@@ -5,6 +5,7 @@ import { IoMdHeartEmpty, IoMdHeart } from 'react-icons/io';
 import axios from 'axios';
 import Cookies from 'js-cookie'
 import { toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 interface User {
     _id: string;
@@ -26,8 +27,10 @@ export default function ToggleFavoritePost({ postId, postTitle }: FavoriteToggle
 
     let user: User | null = null;
     try {
-        user = rawUser ? JSON.parse(decodeURIComponent(rawUser)) : null;
+        const decodedUser = rawUser ? decodeURIComponent(rawUser) : null;
+        user = decodedUser ? JSON.parse(decodedUser) : null;
     } catch (err) {
+        console.error('Failed to decode or parse user cookie:', err);
         user = null;
     }
 
@@ -41,7 +44,7 @@ export default function ToggleFavoritePost({ postId, postTitle }: FavoriteToggle
         }
 
         try {
-            const token = localStorage.getItem("token");
+            const token = Cookies.get("token");
             const response = await axios.post(`${DOMAIN}/api/user/favorites/post`, {
                 postId
             }, {
@@ -65,6 +68,7 @@ export default function ToggleFavoritePost({ postId, postTitle }: FavoriteToggle
 
     return (
         <div className='flex sm:flex-row justify-between items-center mt-3 mb-2 z-999'>
+            <ToastContainer />
             <h2 className="text-lg font-bold mt-1 text-black line-clamp-1 text-muted">{postTitle}</h2>
             <div onClick={toggleFavoritePost} className='cursor-pointer transition-colors duration-300'>
                 {isPostFavorite ? (

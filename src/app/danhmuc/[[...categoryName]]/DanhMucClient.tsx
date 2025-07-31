@@ -19,6 +19,7 @@ interface Product {
     views: number;
     rating: number;
     imageUrl: string;
+    URL: string;
 }
 
 interface Category {
@@ -59,6 +60,7 @@ export default function DanhMucClient({ categoryName, categories, products }: Pr
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [sortOption, setSortOption] = useState<string>('');
 
     const handleSort = (option: string) => {
@@ -159,7 +161,7 @@ export default function DanhMucClient({ categoryName, categories, products }: Pr
                                 <div
                                     key={product._id}
                                     className="w-full sm:w-[48%] lg:w-[calc(80vw/4-1.9rem)] cursor-pointer mx-[0.2vw] border border-gray-300 p-3 hover:shadow-lg transition-shadow duration-300 mb-4 rounded-[25px]"
-                                // onClick={() => (window.location.href = `/detail`)}
+                                    onClick={() => window.open(product.URL, "_blank")}
                                 >
                                     <div className="relative overflow-hidden w-full h-[35vh] rounded-[25px]">
                                         <Image
