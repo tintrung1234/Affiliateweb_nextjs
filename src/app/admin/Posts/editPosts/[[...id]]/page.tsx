@@ -9,7 +9,8 @@ import dynamic from 'next/dynamic';
 import { useParams } from 'next/navigation';
 import sanitizeHtml from 'sanitize-html';
 import Image from 'next/image';
-import BackIcon from '../../../../../../public/assets/img/ic_back.svg'
+import { GoChevronLeft } from "react-icons/go";
+import { GoChevronRight } from "react-icons/go";
 
 // Dynamically import RichTextEditor with SSR disabled
 const RichTextEditor = dynamic(() => import('@/app/admin/Admin_components/RichEditor'), {
@@ -470,19 +471,18 @@ export default function PostForm() {
                             {/* title */}
                             <div className='flex justify-between items-center mb-5'
                             >
-                                <div className='flex space-x-2'>
-                                    {/* button back */}
+                                <div className="flex space-x-2">
                                     <button
                                         onClick={() => scrollLeft("1")}
                                         className="bg-gray-300 w-10 h-10 sm:w-12 sm:h-12 rounded-full justify-center flex items-center pr-1 cursor-pointer hover:bg-gray-400 group focus:bg-black"
                                     >
-                                        <Image src={BackIcon} alt='back-icon' className="w-[30px] h-[30px] text-gray-600 group-hover:text-white group-focus:invert" />
+                                        <GoChevronLeft className="text-[30px] text-gray-800 group-focus:invert" />
                                     </button>
                                     <button
                                         onClick={() => scrollRight("1")}
                                         className="bg-gray-300 w-10 h-10 sm:w-12 sm:h-12 rounded-full justify-center flex items-center cursor-pointer hover:bg-gray-400 group focus:bg-black focus:text-white"
                                     >
-                                        <Image src={BackIcon} alt='back-icon' className="w-[30px] h-[30px] text-gray-600 group-hover:text-white group-focus:invert rotate-180" />
+                                        <GoChevronRight className="text-[30px] text-gray-800 group-focus:invert font-thin" />
                                     </button>
                                 </div>
                             </div>
@@ -501,12 +501,12 @@ export default function PostForm() {
                                                 className="xl:w-[calc(90vw/3-1rem)] lg:w-[calc(90vw/3-1rem)] md:w-[calc(90vw/2-1rem)] sm:w-[calc(90vw-1rem)] flex-shrink-0 border border-gray-300 p-2 hover:shadow-lg transition-shadow duration-300"
                                             >
                                                 <div className='w-full h-48 relative '>
-                                                        <Image
-                                                            fill
-                                                            src={assets.imageUrl}
-                                                            className="object-cover"
-                                                            alt="Assets"
-                                                        />
+                                                    <Image
+                                                        fill
+                                                        src={assets.imageUrl}
+                                                        className="object-cover"
+                                                        alt="Assets"
+                                                    />
                                                 </div>
                                             </div>
                                         ))}

@@ -2,7 +2,8 @@
 import ToggleFavorite from './toggleFavoriteProduct';
 import React, { useRef } from 'react';
 import Image from 'next/image';
-import BackIcon from '../public/assets/img/ic_back.svg';
+import { GoChevronLeft } from "react-icons/go";
+import { GoChevronRight } from "react-icons/go";
 
 type Category = {
     title: string;
@@ -72,13 +73,13 @@ export default function ScrollProduct({
                                     onClick={() => scrollLeft(category.title)}
                                     className="bg-gray-300 w-10 h-10 sm:w-12 sm:h-12 rounded-full justify-center flex items-center pr-1 cursor-pointer hover:bg-gray-400 group focus:bg-black"
                                 >
-                                    <Image src={BackIcon} alt='back-icon' className="w-[30px] h-[30px] text-gray-600 group-hover:text-white group-focus:invert" />
+                                    <GoChevronLeft className="text-[30px] text-gray-800 group-focus:invert" />
                                 </button>
                                 <button
                                     onClick={() => scrollRight(category.title)}
                                     className="bg-gray-300 w-10 h-10 sm:w-12 sm:h-12 rounded-full justify-center flex items-center cursor-pointer hover:bg-gray-400 group focus:bg-black focus:text-white"
                                 >
-                                    <Image src={BackIcon} alt='back-icon' className="w-[30px] h-[30px] text-gray-600 group-hover:text-white group-focus:invert rotate-180" />
+                                    <GoChevronRight className="text-[30px] text-gray-800 group-focus:invert font-thin" />
                                 </button>
                             </div>
                         </div>

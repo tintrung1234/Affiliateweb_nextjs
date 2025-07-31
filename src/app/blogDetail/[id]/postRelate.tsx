@@ -5,7 +5,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import ToggleFavoritePost from "../../../../components/toggleFavoritePost";
 import Image from "next/image";
-import BackIcon from "../../../../public/assets/img/ic_back.svg"
+import { GoChevronLeft } from "react-icons/go";
+import { GoChevronRight } from "react-icons/go";
 
 interface PostType {
     _id: string;
@@ -64,18 +65,20 @@ export default function PostRelate({ categoryName }: { categoryName: string }) {
                 <h2 className={`text-black sm:text-xl lg:text-2xl font-bold`}>Bài viết liên quan</h2>
 
                 <div className='flex space-x-2'>
-                    <button
-                        onClick={() => scrollLeft("0")}
-                        className="bg-gray-300 w-10 h-10 sm:w-12 sm:h-12 rounded-full justify-center flex items-center pr-1 cursor-pointer hover:bg-gray-400 group focus:bg-black"
-                    >
-                        <Image src={BackIcon} alt='back-icon' className="w-[30px] h-[30px] text-gray-600 group-hover:text-white group-focus:invert" />
-                    </button>
-                    <button
-                        onClick={() => scrollRight("0")}
-                        className="bg-gray-300 w-10 h-10 sm:w-12 sm:h-12 rounded-full justify-center flex items-center cursor-pointer hover:bg-gray-400 group focus:bg-black focus:text-white"
-                    >
-                        <Image src={BackIcon} alt='back-icon' className="w-[30px] h-[30px] text-gray-600 group-hover:text-white group-focus:invert rotate-180" />
-                    </button>
+                    <div className="flex space-x-2">
+                        <button
+                            onClick={() => scrollLeft("1")}
+                            className="bg-gray-300 w-10 h-10 sm:w-12 sm:h-12 rounded-full justify-center flex items-center pr-1 cursor-pointer hover:bg-gray-400 group focus:bg-black"
+                        >
+                            <GoChevronLeft className="text-[30px] text-gray-800 group-focus:invert" />
+                        </button>
+                        <button
+                            onClick={() => scrollRight("1")}
+                            className="bg-gray-300 w-10 h-10 sm:w-12 sm:h-12 rounded-full justify-center flex items-center cursor-pointer hover:bg-gray-400 group focus:bg-black focus:text-white"
+                        >
+                            <GoChevronRight className="text-[30px] text-gray-800 group-focus:invert font-thin" />
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -108,7 +111,9 @@ export default function PostRelate({ categoryName }: { categoryName: string }) {
                                     </div>
                                 )
                                     :
-                                    <span > Không có hình ảnh</span>
+                                    <div className="sm:h-56 lg:h-64 bg-gray-200 flex items-center justify-center">
+                                        <span className="text-gray-500 text-sm">Không có ảnh</span>
+                                    </div>
                                 }
                                 <ToggleFavoritePost postId={post._id} postTitle={post.title} />
                                 <div

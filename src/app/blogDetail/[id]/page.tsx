@@ -2,6 +2,7 @@ import Image from "next/image";
 import ProductRelate from "./productRelate";
 import PostRelate from "./postRelate";
 import type { Metadata } from "next";
+import ToggleFavoritePostDetail from "../../../../components/toggleFavoritePostDetail";
 
 const DOMAIN = process.env.NEXT_PUBLIC_HOSTDOMAIN;
 const WEBDOMAIN = process.env.NEXT_PUBLIC_URLWEBSITE;
@@ -98,13 +99,16 @@ export default async function BlogDetail({ params }: PageProps) {
                   <p className="text-gray-500 text-xs">
                     Đăng ngày {new Date(post.createdAt).toLocaleDateString("vi-VN")}
                   </p>
-                  <h1 className="text-gray-500 text-xs">
-                    Lượt xem: {post.views || 0}
-                  </h1>
+                  <div className="flex items-center">
+                    <h1 className="text-gray-500 text-xs mr-1">
+                      Lượt xem: {post.views || 0} |
+                    </h1>
+                    <ToggleFavoritePostDetail postId={post._id} />
+                  </div>
                 </div>
 
                 {/* Tiêu đề bài viết */}
-                <h1 className="text-2xl md:text-3xl font-extrabold leading-tight mt-4 text-gray-900">
+                <h1 className="text-2xl md:text-3xl font-extrabold leading-tight text-gray-900">
                   {post.title}
                 </h1>
 
@@ -123,14 +127,17 @@ export default async function BlogDetail({ params }: PageProps) {
                 />
 
                 {/* Ảnh minh họa */}
-                <div className="relative my-5 w-full h-full md:h-[60vh]">
-                  <Image
-                    fill
-                    src={post.imageUrl}
-                    alt="Blog Illustration"
-                    className="rounded-md object-cover"
-                  />
-                </div>
+                {post.imageUrl &&
+                  (
+                    <div className="relative my-5 w-full h-full md:h-[60vh]">
+                      <Image
+                        fill
+                        src={post.imageUrl}
+                        alt="Blog Illustration"
+                        className="rounded-md object-cover"
+                      />
+                    </div>
+                  )}
 
                 {/* Nội dung HTML từ Editor */}
                 <div
