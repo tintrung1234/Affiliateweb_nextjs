@@ -21,10 +21,10 @@ const Products = ({ id, category, title, price, imageUrl, URL }: ProductProps) =
       data-aos="fade-right"
     >
       <ToastContainer />
-      <div className="overflow-hidden w-full">
-        <div className="relative w-full h-64 rounded-xl overflow-hidden bg-gray-100"
-          onClick={() => window.open(URL, "_blank")}
-        >
+      <div className="overflow-hidden w-full"
+        onClick={() => window.open(URL, "_blank")}
+      >
+        <div className="relative w-full h-64 rounded-xl overflow-hidden bg-gray-100">
           {imageUrl ? (
             <Image
               src={imageUrl}

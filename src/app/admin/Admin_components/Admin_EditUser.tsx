@@ -2,12 +2,15 @@
 import { useState } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
+import Cookies from "js-cookie";
 
 type User = {
     _id: string;
     email: string;
     username: string;
     role: string;
+    favoritesProduct?: string[];
+    favoritesPost?: string[];
 };
 
 interface UserFormProps {
@@ -23,7 +26,9 @@ export default function UserForm({ users = [], fetchUsers }: UserFormProps) {
         email: '',
         username: '',
         password: '',
-        role: 'User'
+        role: '',
+        favoritesProduct: [] as string[],
+        favoritesPost: [] as string[],
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -31,42 +36,46 @@ export default function UserForm({ users = [], fetchUsers }: UserFormProps) {
     };
 
     const resetForm = () => {
-        setFormData({ email: '', username: '', password: '', role: 'User' });
+        setFormData({ email: '', username: '', password: '', role: '', favoritesProduct: [], favoritesPost: [] });
         setIsEdit(false);
         setSelectedUserId(null);
     };
 
     const handleSubmit = async () => {
-        const toastId = toast.loading(isEdit ? "Đang cập nhật user..." : "Đang tạo user...");
-        const token = localStorage.getItem("token");
+    const toastId = toast.loading(isEdit ? "Đang cập nhật user..." : "Đang tạo user...");
+    const token = Cookies.get("token");
 
-        try {
-            if (isEdit && selectedUserId) {
-                await axios.put(`${DOMAIN}/api/user/update/${selectedUserId}`, formData, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                toast.success("Cập nhật user thành công!");
-            } else {
-                await axios.post(`${DOMAIN}/api/user/register`, formData, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                toast.success("Tạo user thành công!");
-            }
-
-            toast.dismiss(toastId);
-            fetchUsers();
-            resetForm();
-        } catch (err) {
-            toast.dismiss(toastId);
-            if (axios.isAxiosError(err)) {
-                toast.error("Lỗi: " + (err.response?.data?.message || err.message));
-            } else if (err instanceof Error) {
-                toast.error("Lỗi: " + err.message);
-            } else {
-                toast.error("Đã xảy ra lỗi không xác định.");
-            }
+    try {
+        if (isEdit && selectedUserId) {
+            await axios.put(`${DOMAIN}/api/user/update`, {
+                ...formData,
+                _id: selectedUserId,
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            toast.success("Cập nhật user thành công!");
+        } else {
+            await axios.post(`${DOMAIN}/api/user/register`, formData, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            toast.success("Tạo user thành công!");
         }
-    };
+
+        toast.dismiss(toastId);
+        fetchUsers();
+        resetForm();
+    } catch (err) {
+        toast.dismiss(toastId);
+        if (axios.isAxiosError(err)) {
+            toast.error("Lỗi: " + (err.response?.data?.message || err.message));
+        } else if (err instanceof Error) {
+            toast.error("Lỗi: " + err.message);
+        } else {
+            toast.error("Đã xảy ra lỗi không xác định.");
+        }
+    }
+};
+
 
     const handleEditClick = (user: User) => {
         setIsEdit(true);
@@ -75,14 +84,16 @@ export default function UserForm({ users = [], fetchUsers }: UserFormProps) {
             email: user.email,
             username: user.username,
             password: '',
-            role: user.role
+            role: user.role,
+            favoritesProduct: user.favoritesProduct || [],
+            favoritesPost: user.favoritesPost || [],
         });
     };
 
     const handleDelete = async (id: string) => {
         if (!window.confirm("Bạn có chắc muốn xoá user này?")) return;
         const toastId = toast.loading("Đang xoá user...");
-        const token = localStorage.getItem("token");
+        const token = Cookies.get("token");
 
         try {
             await axios.delete(`${DOMAIN}/api/user/delete/${id}`, {

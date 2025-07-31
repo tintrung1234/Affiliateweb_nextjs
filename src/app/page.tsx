@@ -1,7 +1,7 @@
 import SlideShow from '../../components/SlideShow';
 import Image from 'next/image';
 import SearchBox from '../../components/SearchBox';
-import Cookies from 'js-cookie'
+import { cookies } from 'next/headers';
 import ToggleFavorite from '../../components/toggleFavoriteProduct';
 import ScrollProduct from '../../components/ScrollProduct';
 
@@ -30,8 +30,10 @@ interface User {
 export default async function Home() {
     const DOMAIN = process.env.NEXT_PUBLIC_HOSTDOMAIN
 
-    const token = Cookies.get('token');
-    const rawUser = Cookies.get('user');
+    const cookieStore = await cookies();
+
+     const token = cookieStore.get('token')?.value;
+    const rawUser = cookieStore.get('user')?.value;
 
     let user: User | null = null;
     try {

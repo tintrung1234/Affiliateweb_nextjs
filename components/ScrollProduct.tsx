@@ -28,6 +28,7 @@ export default function ScrollProduct({
     categories = [], // fallback mảng rỗng
     productsByCategory = {}, // fallback object rỗng
 }: ScrollProductProps) {
+
     const scrollRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
     const scrollLeft = (key: string) => {
@@ -48,17 +49,17 @@ export default function ScrollProduct({
     if (categories.length === 0) {
         return <p className="text-center text-gray-500">Không có sản phẩm để hiển thị</p>;
     }
-    
-    
-   return (
-    <>
-        {categories.map((category, idx) => {
-            const catTitle = category?.title ?? "";
-            const products = Array.isArray(productsByCategory?.[catTitle])
-                ? productsByCategory[catTitle]
-                : [];
 
-            return (
+
+    return (
+        <>
+            {categories.map((category, idx) => {
+                const catTitle = category?.title ?? "";
+                const products = Array.isArray(productsByCategory?.[catTitle])
+                    ? productsByCategory[catTitle]
+                    : [];
+
+                return (
                     <div key={idx} className='px-5 mb-10'
                         data-aos="fade-right"
                         data-aos-duration="1000"
@@ -97,7 +98,7 @@ export default function ScrollProduct({
                                         <div
                                             key={product._id}
                                             className="xl:w-[calc(90vw/5-1rem)] lg:w-[calc(90vw/5-1rem)] md:w-[calc(90vw/4-1rem)] sm:w-[calc(90vw-1rem)] flex-shrink-0 border border-gray-300 outline w-full sm:w-[calc(97vw/2-2rem)] justify-between rounded-[25px] cursor-pointer p-3"
-                                        // onClick={() => (window.location.href = `/detail`)}
+                                            onClick={() => window.open(product.URL, "_blank")}
                                         >
 
                                             <div className="overflow-hidden rounded-[25px]">
@@ -139,7 +140,8 @@ export default function ScrollProduct({
                             >Xem tất cả</a>
                         </div>
                     </div>
-            );
-        })}
-    </>
-);}
+                );
+            })}
+        </>
+    );
+}

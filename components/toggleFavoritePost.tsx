@@ -1,76 +1,85 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IoMdHeartEmpty, IoMdHeart } from 'react-icons/io';
 import axios from 'axios';
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
-import { ToastContainer } from 'react-toastify';
 
 interface User {
     _id: string;
     username: string;
     favoritesPost: string[];
-    // Add other user fields if needed
 }
 
-interface FavoriteToggleProduct {
+interface FavoriteTogglePost {
     postId: string;
     postTitle: string;
 }
 
-export default function ToggleFavoritePost({ postId, postTitle }: FavoriteToggleProduct) {
-    const DOMAIN = process.env.NEXT_PUBLIC_HOSTDOMAIN
-    const token = Cookies.get('token')
+export default function ToggleFavorite({ postId, postTitle }: FavoriteTogglePost) {
+    const DOMAIN = process.env.NEXT_PUBLIC_HOSTDOMAIN;
+    const token = Cookies.get('token');
 
-    const rawUser = Cookies.get('user');
+    const [user, setUser] = useState<User | null>(null);
+    const [favorite, setFavorite] = useState<string[]>([]);
 
-    let user: User | null = null;
-    try {
-        const decodedUser = rawUser ? decodeURIComponent(rawUser) : null;
-        user = decodedUser ? JSON.parse(decodedUser) : null;
-    } catch (err) {
-        console.error('Failed to decode or parse user cookie:', err);
-        user = null;
-    }
+    // Lấy user từ cookie khi mount
+    useEffect(() => {
+        const rawUser = Cookies.get('user');
+        try {
+            const parsedUser = rawUser ? JSON.parse(decodeURIComponent(rawUser)) : null;
+            setUser(parsedUser);
+            setFavorite(parsedUser?.favoritesPost || []);
+        } catch (err) {
+            setUser(null);
+            setFavorite([]);
+        }
+    }, []);
 
-    const [favoritePost, setFavoritePost] = useState<string[]>(user?.favoritesPost || []);
-
-
-    const toggleFavoritePost = async () => {
+    const toggle = async () => {
         if (!token || !user) {
             toast.warning('Vui lòng đăng nhập để thêm vào yêu thích.');
             return;
         }
-
         try {
-            const token = Cookies.get("token");
-            const response = await axios.post(`${DOMAIN}/api/user/favorites/post`, {
-                postId
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
+            const response = await axios.post(
+                `${DOMAIN}/api/user/favorites/post`,
+                { postId },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                 }
-            });
+            );
+            const updatedFavorites: string[] = response.data.favoritesPost;
+            setFavorite(updatedFavorites);
 
-            const updatedFavorites: string[] = response.data.favoriesProduct;
-            setFavoritePost(updatedFavorites);
-
-            const updatedUser = { ...user, favoritesPost: updatedFavorites };
-            localStorage.setItem("user", JSON.stringify(updatedUser));
+            const updatedUser: User = { ...user, favoritesPost: updatedFavorites };
+            Cookies.set('user', encodeURIComponent(JSON.stringify(updatedUser)));
+            setUser(updatedUser); // cập nhật lại state luôn
         } catch (err) {
+            toast.error('Lỗi khi thêm sản phẩm vào danh sách yêu thích.');
             console.error(err);
-            toast.error("Lỗi khi thêm bài viết vào danh sách yêu thích.");
         }
     };
 
-    const isPostFavorite = favoritePost.includes(postId);
+    const isPostFavorite = favorite.includes(postId);
 
     return (
-        <div className='flex sm:flex-row justify-between items-center mt-3 mb-2 z-999'>
-            <ToastContainer />
-            <h2 className="text-lg font-bold mt-1 text-black line-clamp-1 text-muted">{postTitle}</h2>
-            <div onClick={toggleFavoritePost} className='cursor-pointer transition-colors duration-300'>
+        <div className='flex sm:flex-row justify-between w-full items-center mt-3 mb-2'
+            onClick={() => (window.location.href = `/blogDetail/${encodeURIComponent(postId)}`)}
+        >
+            <h2 className="text-black font-bold text-[18px] line-clamp-1 text-muted"
+            >{postTitle}</h2>
+            <div
+                onClick={(e) => {
+                    e.stopPropagation(); // Ngăn sự kiện lan lên thẻ cha
+                    toggle(); // Gọi hàm toggle yêu thích
+                }}
+                className='cursor-pointer transition-colors duration-300'
+            >
+
                 {isPostFavorite ? (
                     <IoMdHeart className='w-7 h-7 text-red-500 transition-colors duration-200' />
                 ) : (

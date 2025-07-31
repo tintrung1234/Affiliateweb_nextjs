@@ -33,7 +33,7 @@ export default function ToggleFavorite({ productId, productTitle }: FavoriteTogg
 
     const [favorite, setFavorite] = useState<string[]>(user?.favoritesProduct || []);
 
-    
+
     const toggle = async () => {
         if (!token || !user) {
             toast.warning('Vui lòng đăng nhập để thêm vào yêu thích.');
@@ -49,8 +49,7 @@ export default function ToggleFavorite({ productId, productTitle }: FavoriteTogg
                     },
                 }
             );
-
-            const updatedFavorites: string[] = response.data.favoriesProduct;
+            const updatedFavorites: string[] = response.data.favoritesProduct;
             setFavorite(updatedFavorites);
 
             const updatedUser: User = { ...user, favoritesProduct: updatedFavorites };
@@ -67,7 +66,10 @@ export default function ToggleFavorite({ productId, productTitle }: FavoriteTogg
     return (
         <div className='flex sm:flex-row justify-between w-full items-center mt-3 mb-2'>
             <h2 className="text-black font-bold text-[18px] line-clamp-1 text-muted">{productTitle}</h2>
-            <div onClick={toggle} className='cursor-pointer transition-colors duration-300'>
+            <div onClick={(e) => {
+                e.stopPropagation(); // Ngăn sự kiện lan lên thẻ cha
+                toggle(); // Gọi hàm toggle yêu thích
+            }} className='cursor-pointer transition-colors duration-300'>
                 {isProductFavorite ? (
                     <IoMdHeart className='w-7 h-7 text-red-500 transition-colors duration-200' />
                 ) : (

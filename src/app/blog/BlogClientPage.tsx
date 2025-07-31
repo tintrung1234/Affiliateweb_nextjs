@@ -182,7 +182,6 @@ export default function BlogClientPage(
                                     <div
                                         key={post._id}
                                         className="xl:w-[calc(90vw/3-1rem)] lg:w-[calc(90vw/3-1rem)] md:w-[calc(90vw/2-1rem)] sm:w-[calc(90vw-1rem)] flex-shrink-0 border border-gray-300 p-2 hover:shadow-lg transition-shadow duration-300"
-                                        onClick={() => (window.location.href = `/blogDetail/${encodeURIComponent(post._id)}`)}
                                     >
                                         <div className="overflow-hidden">
                                             {post.imageUrl ? (
@@ -192,6 +191,7 @@ export default function BlogClientPage(
                                                         src={post.imageUrl}
                                                         className="sm:h-56 lg:h-64 object-cover hover:scale-110 transition-transform duration-300"
                                                         alt={post.title}
+                                                        onClick={() => (window.location.href = `/blogDetail/${encodeURIComponent(post._id)}`)}
                                                     />
                                                 </div>
                                             ) : <div className="sm:h-56 lg:h-64 bg-gray-200 flex items-center justify-center">
@@ -203,6 +203,7 @@ export default function BlogClientPage(
                                         <div
                                             className="text-gray-600 text-sm mt-2  line-clamp-2 text-muted"
                                             dangerouslySetInnerHTML={{ __html: post.description }}
+                                            onClick={() => (window.location.href = `/blogDetail/${encodeURIComponent(post._id)}`)}
                                         />
                                     </div>
                                 ))}

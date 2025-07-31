@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Cookies from "js-cookie";
 
 const DOMAIN = process.env.NEXT_PUBLIC_HOSTDOMAIN;
 
@@ -51,7 +52,7 @@ export default function Admin_EditInformation() {
 
     const handleCreate = async () => {
         try {
-            const token = localStorage.getItem("token");
+            const token = Cookies.get("token");
             await axios.post(`${DOMAIN}/api/information/create`, {
                 ...formData,
                 phoneNumber: Number(formData.phoneNumber),
@@ -67,7 +68,7 @@ export default function Admin_EditInformation() {
 
     const handleUpdate = async () => {
         try {
-            const token = localStorage.getItem("token");
+            const token = Cookies.get("token");
             await axios.put(`${DOMAIN}/api/information/update/${info?._id}`, {
                 ...formData,
                 phoneNumber: Number(formData.phoneNumber),
@@ -84,7 +85,7 @@ export default function Admin_EditInformation() {
     const handleDelete = async () => {
         if (!confirm("Bạn có chắc muốn xóa không?")) return;
         try {
-            const token = localStorage.getItem("token");
+            const token = Cookies.get("token");
             await axios.delete(`${DOMAIN}/api/information/delete/${info?._id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });

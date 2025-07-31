@@ -172,7 +172,6 @@ export default function TaiKhoan() {
 
     axios.interceptors.request.use((config) => {
         const t = Cookies.get('token');
-        console.log("token:", t)
         if (!t || isTokenExpired(t)) {
             Cookies.remove('token');
             Cookies.remove('user');

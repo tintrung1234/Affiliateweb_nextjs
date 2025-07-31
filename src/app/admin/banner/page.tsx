@@ -6,6 +6,7 @@ import ImagePostDropzone from "../../../../components/ImagePostDropzone";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Image from "next/image";
+import Cookies from "js-cookie";
 
 interface bannerType {
     _id: string;
@@ -23,8 +24,8 @@ export default function Admin_EditBanner() {
 
     useEffect(() => {
         // Ensure token is read from client only
-        const t = localStorage.getItem("token");
-        setToken(t);
+        const t = Cookies.get("token");
+        setToken(t ??null);
     }, []);
 
     useEffect(() => {
@@ -169,7 +170,7 @@ export default function Admin_EditBanner() {
             <button
                 onClick={handleSubmit}
                 disabled={uploading || banners.length >= 3}
-                className={`mt-4 px-6 py-2 flex mx-auto rounded text-white ${banners.length >= 3
+                className={`mt-4 px-6 py-2 flex mx-auto rounded text-white cursor-pointer ${banners.length >= 3
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-blue-600 hover:bg-blue-700"
                     }`}
