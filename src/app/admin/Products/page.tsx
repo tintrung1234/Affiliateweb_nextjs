@@ -13,6 +13,7 @@ interface ProductType {
     price: number;
     views?: number;
     rating?: number;
+    URL?: number;
 }
 
 export default function Admin_ShowAllProducts() {

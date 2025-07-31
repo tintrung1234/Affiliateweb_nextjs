@@ -1,5 +1,4 @@
 import "./DanhMuc.css";
-import { toast } from "react-toastify";
 // import Breadcrumb from "../components/BreadCrumb";
 import DanhMucClient from "./DanhMucClient";
 
@@ -50,7 +49,6 @@ export default async function DanhMuc({ params }: PageProps) {
     }
   } catch (error) {
     console.error("Lỗi khi tải danh mục:", error);
-    toast.error("Không thể tải danh mục.");
   }
 
   let products: Product[] = [];
@@ -80,7 +78,6 @@ export default async function DanhMuc({ params }: PageProps) {
     }
   } catch (error) {
     console.error("Lỗi khi tải sản phẩm:", error);
-    toast.error("Không thể tải sản phẩm.");
   }
 
   return (

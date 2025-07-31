@@ -10,7 +10,7 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 
 const RichTextEditor = dynamic(() => import('@/app/admin/Admin_components/RichEditor'), {
-  ssr: false,
+    ssr: false,
 });
 
 interface ProductType {
@@ -22,6 +22,7 @@ interface ProductType {
     price: number;
     views?: number;
     rating?: number;
+    URL?: number;
 }
 
 interface CateType {
@@ -43,6 +44,7 @@ export default function ProductForm() {
         views: "",
         rating: "",
         imageUrl: "",
+        URL: "",
     });
     // const navigate = useNavigate();
     const params = useParams();
@@ -76,12 +78,13 @@ export default function ProductForm() {
                     rating: p.rating ?? "",
                     category: p.category || "",
                     imageUrl: p.imageUrl || "",
+                    URL: p.URL || "",
                 });
                 setPreview(p.imageUrl || "");
             });
         }
 
-    }, [productId, selectedProductId]);
+    }, [DOMAIN, productId, selectedProductId]);
 
     useEffect(() => {
         // Luôn fetch toàn bộ product khi vào trang
@@ -111,6 +114,7 @@ export default function ProductForm() {
                     rating: p.rating?.toString() || "",
                     category: p.category || "",
                     imageUrl: p.imageUrl || "",
+                    URL: p.URL || "",
                 });
                 setPreview(p.imageUrl || "");
             });
@@ -202,6 +206,7 @@ export default function ProductForm() {
                 rating: "",
                 category: "",
                 imageUrl: "",
+                URL: "",
             });
             setImageFile(null);
             setPreview("https://res.cloudinary.com/daeorkmlh/image/upload/v1750835215/No-Image-Placeholder.svg_v0th8g.png");
@@ -239,6 +244,7 @@ export default function ProductForm() {
                 rating: "",
                 category: "",
                 imageUrl: "",
+                URL: "",
             });
             setImageFile(null);
             setPreview(
@@ -272,6 +278,7 @@ export default function ProductForm() {
                             rating: "",
                             category: "",
                             imageUrl: "",
+                            URL: "",
                         });
                     }}
                 >
@@ -392,6 +399,18 @@ export default function ProductForm() {
                             <option value={cat.title} key={cat._id}>{cat.title}</option>
                         ))}
                     </select>
+                </div>
+                <div className="flex space-x-4">
+                    <div className="flex-1">
+                        <label className="font-bold">URL sản phẩm</label>
+                        <input
+                            className="w-full p-2 mt-1 rounded bg-white"
+                            name="URL"
+                            value={formData.URL}
+                            onChange={handleChange}
+                            placeholder="https//..."
+                        />
+                    </div>
                 </div>
                 {/* Image */}
                 <div className="p-3">

@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import arrow from "../../../public/assets/img/left.png";
 import ic_star from '../../../public/assets/img/ic_star.png'
 import axios from 'axios';
-import { toast } from 'react-toastify';
 import ToggleFavorite from '../../../components/toggleFavoriteProduct';
 import Image from 'next/image';
 import Breadcrumb from '../../../components/BreadCrumb';
@@ -32,7 +31,6 @@ export default function TopDeal() {
                 );
                 setProducts(response.data);
             } catch (error) {
-                toast.error("Không thể tải dữ liệu bài giảm giá!");
                 console.error("Error fetching top blog:", error);
             }
         };

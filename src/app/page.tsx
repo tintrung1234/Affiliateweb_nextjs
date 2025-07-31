@@ -1,7 +1,6 @@
 import SlideShow from '../../components/SlideShow';
 import Image from 'next/image';
 import SearchBox from '../../components/SearchBox';
-import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie'
 import ToggleFavorite from '../../components/toggleFavoriteProduct';
@@ -58,7 +57,6 @@ export default async function Home() {
             productsByCategory[category.title] = Array.isArray(result) ? result : [];
         } catch (error) {
             console.error('Lỗi khi tải sản phẩm:', error);
-            toast.error('Không thể tải dữ liệu các danh mục.');
         }
     }
 
@@ -70,12 +68,10 @@ export default async function Home() {
         top2Products = await response.json();
     } catch (error) {
         console.error('Lỗi khi tải sản phẩm top:', error);
-        toast.error('Không thể tải dữ liệu bài giảm giá!');
     }
 
     return (
         <div className='w-full px-6'>
-            <ToastContainer />
             <SlideShow />
             <div className='relative h-[6vh] px-5 w-full mt-3 flex items-center justify-end'>
                 <SearchBox type='product' />
