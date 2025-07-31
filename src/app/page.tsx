@@ -1,7 +1,6 @@
 import SlideShow from '../../components/SlideShow';
 import Image from 'next/image';
 import SearchBox from '../../components/SearchBox';
-import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie'
 import ToggleFavorite from '../../components/toggleFavoriteProduct';
 import ScrollProduct from '../../components/ScrollProduct';
