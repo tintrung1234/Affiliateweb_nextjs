@@ -143,7 +143,7 @@ export default async function BlogDetail({ params }: PageProps) {
                 <div
                   className="text-gray-800 leading-relaxed text-[15px] space-y-4 mt-2"
                   dangerouslySetInnerHTML={{
-                    __html: typeof post.description === "string" ? post.description : "",
+                    __html: typeof post.content === "string" ? post.content : "",
                   }}
                 />
               </div>
