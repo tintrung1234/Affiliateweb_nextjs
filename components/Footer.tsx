@@ -5,7 +5,6 @@ import ic_fb from '../public/assets/img/ic_fb.png'
 import ic_tw from '../public/assets/img/ic_tw.png'
 import ic_ig from '../public/assets/img/ic_ig.png'
 import ic_yt from '../public/assets/img/ic_yt.png'
-import { toast } from 'react-toastify'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -27,7 +26,6 @@ export default async function Footer() {
             info = infoData[0]
         }
     } catch (err) {
-        toast.error("Failed to fetch information.");
         console.error(err);
     }
 

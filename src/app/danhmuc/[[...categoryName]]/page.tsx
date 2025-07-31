@@ -1,5 +1,5 @@
 import "./DanhMuc.css";
-// import Breadcrumb from "../components/BreadCrumb";
+import Breadcrumb from "../../../../components/BreadCrumb";
 import DanhMucClient from "./DanhMucClient";
 
 interface Product {

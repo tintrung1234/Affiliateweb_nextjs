@@ -1,3 +1,4 @@
+'use client'
 import Sidebar from "./Admin_components/sideBar";
 
 export default function RootLayout({
