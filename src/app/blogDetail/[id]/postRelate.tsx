@@ -98,7 +98,7 @@ export default function PostRelate({ categoryName }: { categoryName: string }) {
                                 onClick={() => (window.location.href = `/detail/${encodeURIComponent(post._id)}`)}
                             >
                                 {post.imageUrl ? (
-                                    <div className="relative w-[60vw] h-48 sm:h-56 lg:h-64">
+                                    <div className="relative w-full h-48 sm:h-56 lg:h-64">
                                         <Image
                                             fill
                                             src={post.imageUrl}

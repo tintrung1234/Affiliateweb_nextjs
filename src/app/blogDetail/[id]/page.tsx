@@ -1,8 +1,10 @@
 import Image from "next/image";
 import ProductRelate from "./productRelate";
 import PostRelate from "./postRelate";
+import type { Metadata } from "next";
 
-const DOMAIN = process.env.NEXT_PUBLIC_HOSTDOMAIN
+const DOMAIN = process.env.NEXT_PUBLIC_HOSTDOMAIN;
+const WEBDOMAIN = process.env.NEXT_PUBLIC_URLWEBSITE;
 
 interface PostType {
   _id: string;
@@ -18,12 +20,23 @@ interface PostType {
   metaKeywords: string;
 }
 
-const WEBDOMAIN = process.env.NEXT_PUBLIC_URLWEBSITE
+// Define the props type for the page
+type PageProps = {
+  params: Promise<{ id: string }>; // Use Promise for params
+};
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_HOSTDOMAIN}/api/posts/detail/${encodeURIComponent(params.id)}`, {
-    cache: "no-store",
-  });
+// Metadata generation function
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { id } = await params; // Await the params Promise to get the id
+
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_HOSTDOMAIN}/api/posts/detail/${encodeURIComponent(id)}`,
+    {
+      cache: "no-store",
+    }
+  );
 
   if (!res.ok) {
     return {
@@ -33,8 +46,8 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
 
   const post = await res.json();
 
-  const postUrl = `${process.env.NEXT_PUBLIC_URLWEBSITE}/blogDetail/${params.id}`;
-  const postDescription = post.description?.replace(/<[^>]+>/g, '').slice(0, 160); // loại bỏ tag HTML nếu cần
+  const postUrl = `${process.env.NEXT_PUBLIC_URLWEBSITE}/blogDetail/${id}`;
+  const postDescription = post.description?.replace(/<[^>]+>/g, "").slice(0, 160);
 
   return {
     title: post.title,
@@ -59,21 +72,24 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
   };
 }
 
+// Page component
+export default async function BlogDetail({ params }: PageProps) {
+  const { id } = await params; // Await the params Promise to get the id
 
-export default async function BlogDetail({ params }: { params: { id: string } }) {
-  const id = params.id;
-
-  const postRes = await fetch(`${DOMAIN}/api/posts/detail/${encodeURIComponent(id)}`, {
-    cache: "no-store",
-  });
+  const postRes = await fetch(
+    `${DOMAIN}/api/posts/detail/${encodeURIComponent(id)}`,
+    {
+      cache: "no-store",
+    }
+  );
 
   const post: PostType = await postRes.json();
 
   return (
     <>
-      <div className="mt-22 ">
+      <div className="mt-22">
         <div className="lg:flex mb-5 px-28">
-          {/* Blog Detail  */}
+          {/* Blog Detail */}
           <div className="lg:w-4/5 sm:w-full lg:border-r border-gray-300 mb-3">
             <div className="w-full mx-auto">
               <div className="mr-5 justify-center px-5 py-4 bg-purple border border-black shadow-md">
@@ -97,9 +113,7 @@ export default async function BlogDetail({ params }: { params: { id: string } })
                   <span role="img" aria-label="emoji">
                     🎯
                   </span>
-                  <span>
-                    {post.category}
-                  </span>
+                  <span>{post.category}</span>
                 </div>
 
                 {/* Nội dung HTML từ Editor */}
@@ -122,19 +136,18 @@ export default async function BlogDetail({ params }: { params: { id: string } })
                 <div
                   className="text-gray-800 leading-relaxed text-[15px] space-y-4 mt-2"
                   dangerouslySetInnerHTML={{
-                    __html: typeof post.description === 'string' ? post.description : ''
+                    __html: typeof post.description === "string" ? post.description : "",
                   }}
                 />
               </div>
             </div>
           </div>
 
-          {/* Product with Category  */}
+          {/* Product with Category */}
           <ProductRelate categoryName={post.category} />
-
         </div>
 
-        {/* Post realate */}
+        {/* Post relate */}
         <PostRelate categoryName={post.category} />
       </div>
     </>
