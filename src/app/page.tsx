@@ -1,103 +1,154 @@
-import Image from "next/image";
+import SlideShow from '../../components/SlideShow';
+import Image from 'next/image';
+import SearchBox from '../../components/SearchBox';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Cookies from 'js-cookie'
+import ToggleFavorite from '../../components/toggleFavoriteProduct';
+import ScrollProduct from '../../components/ScrollProduct';
 
-export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+interface Product {
+    _id: string;
+    title: string;
+    description: string;
+    price: number | string;
+    views: number;
+    rating: number;
+    imageUrl: string;
+}
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+interface Category {
+    _id: string;
+    title: string;
+}
+
+interface User {
+    _id: string;
+    username: string;
+    favoritesProduct: string[];
+}
+
+export default async function Home() {
+    const DOMAIN = process.env.NEXT_PUBLIC_HOSTDOMAIN
+
+    const token = Cookies.get('token');
+    const rawUser = Cookies.get('user');
+
+    let user: User | null = null;
+    try {
+        user = rawUser ? JSON.parse(decodeURIComponent(rawUser)) : null;
+    } catch (err) {
+        user = null;
+    }
+
+    let categories: Category[] = [];
+    try {
+        const response = await fetch(`${DOMAIN}/api/categories`);
+        categories = await response.json();
+    } catch (error) {
+        console.error('Lỗi khi tải danh mục:', error);
+    }
+
+    const productsByCategory: Record<string, Product[]> = {};
+    for (const category of categories) {
+        try {
+            const res = await fetch(`${DOMAIN}/api/products/category/${encodeURIComponent(category.title)}`);
+            const result = await res.json();
+
+            productsByCategory[category.title] = Array.isArray(result) ? result : [];
+        } catch (error) {
+            console.error('Lỗi khi tải sản phẩm:', error);
+            toast.error('Không thể tải dữ liệu các danh mục.');
+        }
+    }
+
+    console.log(productsByCategory)
+
+    let top2Products: Product[] = [];
+    try {
+        const response = await fetch(`${DOMAIN}/api/products/top2product`);
+        top2Products = await response.json();
+    } catch (error) {
+        console.error('Lỗi khi tải sản phẩm top:', error);
+        toast.error('Không thể tải dữ liệu bài giảm giá!');
+    }
+
+    return (
+        <div className='w-full px-6'>
+            <ToastContainer />
+            <SlideShow />
+            <div className='relative h-[6vh] px-5 w-full mt-3 flex items-center justify-end'>
+                <SearchBox type='product' />
+            </div>
+            <div className='px-5'>
+                {/* Slogan */}
+                <div className='flex text-3xl sm:text-4xl lg:text-5xl font-bold text-black items-center mt-5'>
+                    <h1 className='mr-4 text-red-500'>Best</h1>
+                    <h1>Deals,</h1>
+                </div>
+                <div className='flex text-3xl sm:text-4xl lg:text-5xl font-bold text-black items-center'>
+                    <h1 className='mr-4 text-gray-400'>Zero</h1>
+                    <h1>Stress</h1>
+                </div>
+                <p className='text-black font-bold mt-2 tracking-wide'>Bạn chỉ cần mua sắm – việc tìm deal đã có chúng tôi lo</p>
+                <hr className="h-px my-3 w-[40vw] bg-gray-200 border-0 dark:bg-gray-700 mb-12"></hr>
+            </div>
+
+            <div className='max-w-[90vw] mx-auto mb-10'>
+
+                {/* product by category session */}
+                <ScrollProduct categories={categories} productsByCategory={productsByCategory} />
+
+                {/* Top discount weekly */}
+                <div className='mt-15 px-5 flex items-center'
+                    data-aos="fade-right"
+                    data-aos-duration="1000"
+                    data-aos-easing="ease-in-out">
+                    <Image src="/assets/img/ic_cart.png" width={42} height={44} className='mr-3' alt="Cart" />
+
+                    <h1 className='font-bold text-black text-[30px]'>TOP GIẢM GIÁ HÀNG TUẦN</h1>
+                </div>
+
+                <div className='flex px-5 mb-10 mt-3  justify-between gap-2' data-aos="fade-up">
+                    {/* product */}
+                    {top2Products.map(Products => {
+                        return (
+                            <div
+                                key={Products._id}
+                                className='relative border border-black outline w-full sm:w-[calc(97vw/2-2rem)] justify-between rounded-[25px] cursor-pointer'>
+                                <div className='relative w-full h-[40vh]'>
+                                    <Image
+                                        src={Products.imageUrl}
+                                        fill
+                                        className="object-cover rounded-tl-[25px] rounded-tr-[25px]"
+                                        alt={Products.title}
+                                    />
+                                </div>
+                                <div className='flex sm:flex-row flex-col justify-between px-4 items-center mt-3 mb-2'>
+                                    <div className='flex'>
+                                        <h2 className='text-gray-400 font-bold text-sm sm:text-base mr-2'>Views:</h2>
+                                        <h2 className='text-gray-400 font-bold text-sm sm:text-base'>{Products.views || 1246}</h2>
+                                    </div>
+                                    <div className='flex items-center'>
+                                        <Image src="assets/img/ic_star.png" alt='start icon' width={42} height={44} className='object-cover sm:w-8 sm:h-8' />
+                                        <h2 className='text-black font-bold text-base sm:text-lg'>{Products.rating || 5}</h2>
+                                    </div>
+                                </div>
+                                <div className='px-4'>
+                                    <ToggleFavorite
+                                        productId={Products._id}
+                                        productTitle={Products.title} />
+                                </div>
+                                <div className="font-bold flex sm:flex-row flex-col text-sm sm:text-base mt-1 px-4 mb-3">
+                                    <p className="mr-2 text-black">Giá tiền:</p>
+                                    <p className="text-red-500">{Number(Products.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                                </div>
+                            </div>
+                        )
+                    })}
+
+                </div>
+            </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+    )
 }
