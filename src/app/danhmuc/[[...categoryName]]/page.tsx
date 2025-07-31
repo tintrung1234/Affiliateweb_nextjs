@@ -10,6 +10,7 @@ interface Product {
   views: number;
   rating: number;
   imageUrl: string;
+  URL: string
 }
 
 interface Category {
