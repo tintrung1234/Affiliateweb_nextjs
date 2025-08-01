@@ -19,6 +19,7 @@ interface PostType {
   metaTitle: string;
   metaDescription: string;
   metaKeywords: string;
+  metaURL: string
 }
 
 // Define the props type for the page
@@ -57,7 +58,7 @@ export async function generateMetadata({
     openGraph: {
       title: post.metaTitle,
       description: post.metaDescription,
-      url: postUrl,
+      url: post.metaUrrl,
       type: "article",
       siteName: "Tên trang web của bạn",
       images: post.imageUrl
@@ -89,11 +90,11 @@ export default async function BlogDetail({ params }: PageProps) {
   return (
     <>
       <div className="mt-22">
-        <div className="lg:flex mb-5 px-28">
+        <div className="lg:flex mb-5 lg:px-28 px-5">
           {/* Blog Detail */}
           <div className="lg:w-4/5 sm:w-full lg:border-r border-gray-300 mb-3">
             <div className="w-full mx-auto">
-              <div className="mr-5 justify-center px-5 py-4 bg-purple border border-black shadow-md">
+              <div className="lg:mr-5 justify-center px-5 py-4 bg-purple border border-black shadow-md">
                 {/* Tác giả */}
                 <div className="flex items-center justify-between mt-3">
                   <p className="text-gray-500 text-xs">
@@ -126,18 +127,20 @@ export default async function BlogDetail({ params }: PageProps) {
                   dangerouslySetInnerHTML={{ __html: post.description }}
                 />
 
-                {/* Ảnh minh họa */}
-                {post.imageUrl &&
-                  (
-                    <div className="relative my-5 w-full h-full md:h-[60vh]">
+                {post.imageUrl && (
+                  <div className="flex justify-center">
+                    <div className="my-5 lg:w-[50vw] w-[80vw] md:h-[60vh] sm:h-[30vh] h-[30vh] relative">
                       <Image
-                        fill
                         src={post.imageUrl}
                         alt="Blog Illustration"
-                        className="rounded-md object-cover"
+                        className="rounded-md object-cover w-full h-full"
+                        style={{ objectFit: "contain" }} // hoặc "contain" nếu muốn giữ nguyên tỷ lệ và không crop
+                        fill
+                        sizes="(max-width: 768px) 100vw, lg:60vw 30vw"
                       />
                     </div>
-                  )}
+                  </div>
+                )}
 
                 {/* Nội dung HTML từ Editor */}
                 <div

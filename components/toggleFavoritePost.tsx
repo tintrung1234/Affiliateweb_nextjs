@@ -5,6 +5,7 @@ import { IoMdHeartEmpty, IoMdHeart } from 'react-icons/io';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 interface User {
     _id: string;
@@ -70,6 +71,7 @@ export default function ToggleFavorite({ postId, postTitle }: FavoriteTogglePost
         <div className='flex sm:flex-row justify-between w-full items-center mt-3 mb-2'
             onClick={() => (window.location.href = `/blogDetail/${encodeURIComponent(postId)}`)}
         >
+            <ToastContainer />
             <h2 className="text-black font-bold text-[18px] line-clamp-1 text-muted"
             >{postTitle}</h2>
             <div

@@ -19,12 +19,14 @@ interface PostType {
     metaTitle: string;
     metaDescription: string;
     metaKeywords: string;
+    metaURL: string;
 }
 
 interface FormData {
     metaTitle: string;
     metaDescription: string;
     metaKeywords: string;
+    metaURL: string;
 }
 
 export default function PostForm() {
@@ -38,6 +40,7 @@ export default function PostForm() {
         metaTitle: "",
         metaDescription: "",
         metaKeywords: "",
+        metaURL: "",
     });
     const [postsState, setPostsState] = useState<PostType[]>([]);
 
@@ -66,6 +69,7 @@ export default function PostForm() {
                         metaTitle: p.metaTitle || '',
                         metaDescription: p.metaDescription || '',
                         metaKeywords: p.metaKeywords || '',
+                        metaURL: p.metaURL || '',
                     });
                 })
                 .catch((err) => {
@@ -78,6 +82,7 @@ export default function PostForm() {
                 metaTitle: '',
                 metaDescription: '',
                 metaKeywords: '',
+                metaURL: ''
             });
         }
     }, [postId, selectedPostId, DOMAIN]);
@@ -104,6 +109,7 @@ export default function PostForm() {
                 metaTitle: selectedPost.metaTitle || '',
                 metaDescription: selectedPost.metaDescription || '',
                 metaKeywords: selectedPost.metaKeywords || "",
+                metaURL: selectedPost.metaURL || "",
             });
         }
     }, [formTab, selectedPostId, postsState]);
@@ -114,6 +120,7 @@ export default function PostForm() {
             data.append('metaTitle', formData.metaTitle);
             data.append('metaDescription', formData.metaDescription);
             data.append('metaKeywords', formData.metaKeywords);
+            data.append('metaURL', formData.metaURL);
             const toastId = toast.loading('Đang cập nhật SEO...');
 
             await axios.put(`${DOMAIN}/api/posts/update/${selectedPostId}`, data, {
@@ -129,6 +136,7 @@ export default function PostForm() {
                 metaTitle: '',
                 metaDescription: '',
                 metaKeywords: '',
+                metaURL: ''
             });
 
             setSelectedPostId('');
@@ -188,6 +196,18 @@ export default function PostForm() {
                         placeholder="Tóm tắt bài viết (dưới 160 ký tự)"
                     ></textarea>
                 </div>
+
+                <div className="mb-4">
+                    <label className="font-bold block mb-2">Meta URL (SLUG)</label>
+                    <textarea
+                        className="w-full p-2 rounded bg-white border border-gray-300"
+                        name="metaURL"
+                        value={formData.metaURL || ""}
+                        onChange={handleChange}
+                        placeholder="Ví dụ: /blog/ten-bai-viet"
+                    ></textarea>
+                </div>
+
 
                 <div className="mb-4">
                     <label className="font-bold block mb-2">Meta Keywords</label>

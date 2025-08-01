@@ -87,7 +87,7 @@ export default function BlogClientPage(
                                                 <Image
                                                     fill
                                                     src={topPost.imageUrl}
-                                                    className="mb-4 hover:scale-110 transition-transform duration-300 hover:cursor-pointer"
+                                                    className="mb-4 hover:scale-110 transition-transform object-cover duration-300 hover:cursor-pointer"
                                                     alt={topPost.title}
                                                 />
                                             </div>
@@ -178,11 +178,11 @@ export default function BlogClientPage(
                                 if (el) scrollRefs.current[category.title] = el;
                             }}
                             className="overflow-x-auto no-scrollbar cursor-pointer scroll-smooth transition ease-in-out duration-300">
-                            <div className="flex w-fit space-x-4">
+                            <div className="flex w-fit lg:space-x-4 md:space-x-3 sm:space-x-2">
                                 {(postsByCategory[category.title] || []).map((post) => (
                                     <div
                                         key={post._id}
-                                        className="xl:w-[calc(90vw/3-1rem)] lg:w-[calc(90vw/3-1rem)] md:w-[calc(90vw/2-1rem)] sm:w-[calc(90vw-1rem)] flex-shrink-0 border border-gray-300 p-2 hover:shadow-lg transition-shadow duration-300"
+                                        className="xl:w-[calc(90vw/3-1rem)] lg:w-[calc(90vw/3-1rem)] md:w-[calc(90vw/2-1rem)] w-[60vw] flex-shrink-0 border border-gray-300 p-2 hover:shadow-lg transition-shadow duration-300"
                                     >
                                         <div className="overflow-hidden">
                                             {post.imageUrl ? (
@@ -195,7 +195,7 @@ export default function BlogClientPage(
                                                         onClick={() => (window.location.href = `/blogDetail/${encodeURIComponent(post._id)}`)}
                                                     />
                                                 </div>
-                                            ) : <div className="sm:h-56 lg:h-64 bg-gray-200 flex items-center justify-center">
+                                            ) : <div className="sm:h-56 h-64 bg-gray-200 flex items-center justify-center">
                                                 <span className="text-gray-500 text-sm">Không có ảnh</span>
                                             </div>
                                             }

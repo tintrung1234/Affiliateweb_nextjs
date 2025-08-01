@@ -5,6 +5,7 @@ import { IoMdHeartEmpty, IoMdHeart } from 'react-icons/io';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 interface User {
     _id: string;
@@ -69,6 +70,7 @@ export default function ToggleFavoritePostDetail({ postId }: FavoriteTogglePost)
         <div className='flex sm:flex-row justify-between items-center mt-3 mb-2'
             onClick={() => (window.location.href = `/blogDetail/${encodeURIComponent(postId)}`)}
         >
+            <ToastContainer />
             <div
                 onClick={(e) => {
                     e.stopPropagation(); // Ngăn sự kiện lan lên thẻ cha

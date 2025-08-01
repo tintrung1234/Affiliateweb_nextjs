@@ -5,6 +5,7 @@ import { IoMdHeartEmpty, IoMdHeart } from 'react-icons/io';
 import axios from 'axios';
 import Cookies from 'js-cookie'
 import { toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 interface User {
     _id: string;
@@ -65,6 +66,7 @@ export default function ToggleFavorite({ productId, productTitle }: FavoriteTogg
 
     return (
         <div className='flex sm:flex-row justify-between w-full items-center mt-3 mb-2'>
+            <ToastContainer />
             <h2 className="text-black font-bold text-[18px] line-clamp-1 text-muted">{productTitle}</h2>
             <div onClick={(e) => {
                 e.stopPropagation(); // Ngăn sự kiện lan lên thẻ cha
