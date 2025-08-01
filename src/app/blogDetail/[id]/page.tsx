@@ -58,7 +58,7 @@ export async function generateMetadata({
     openGraph: {
       title: post.metaTitle,
       description: post.metaDescription,
-      url: post.metaUrrl,
+      url: post.metaURL,
       type: "article",
       siteName: "Tên trang web của bạn",
       images: post.imageUrl
