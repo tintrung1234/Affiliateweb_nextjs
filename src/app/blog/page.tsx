@@ -8,6 +8,7 @@ interface PostType {
     imageUrl: string;
     content: string;
     description: string;
+    slug: string;
     createdAt: Date
 }
 

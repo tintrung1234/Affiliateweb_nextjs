@@ -16,6 +16,7 @@ interface PostType {
     imageUrl: string;
     content: string;
     description: string;
+    slug: string;
     createdAt: Date
 }
 
@@ -55,8 +56,8 @@ export default function BlogClientPage(
 
     const router = useRouter();
 
-    const handleDetailClick = (_id: string) => {
-        router.push(`/blogDetail/${encodeURIComponent(_id)}`);
+    const handleDetailClick = (slug: string) => {
+        router.push(slug);
     };
 
     return (
@@ -107,7 +108,7 @@ export default function BlogClientPage(
                                 />
                                 <button
                                     className="bg-yellow-300 text-black px-4 py-2 font-semibold hover:bg-yellow-400 cursor-pointer"
-                                    onClick={() => handleDetailClick(topPost._id)}
+                                    onClick={() => handleDetailClick(topPost.slug)}
                                 >
                                     Xem thêm {">"}
                                 </button>
@@ -130,7 +131,7 @@ export default function BlogClientPage(
                                 key={post._id}
                                 className="px-3 py-5 mb-3 cursor-pointer hover:bg-yellow-50"
                                 onClick={() => {
-                                    handleDetailClick(post._id);
+                                    handleDetailClick(post.slug);
                                 }}
                             >
                                 <div className="text-sm text-gray-600 mb-1">
@@ -192,7 +193,7 @@ export default function BlogClientPage(
                                                         src={post.imageUrl}
                                                         className="sm:h-56 lg:h-64 object-cover hover:scale-110 transition-transform duration-300"
                                                         alt={post.title}
-                                                        onClick={() => (window.location.href = `/blogDetail/${encodeURIComponent(post._id)}`)}
+                                                        onClick={() => (window.location.href = `${post.slug}`)}
                                                     />
                                                 </div>
                                             ) : <div className="sm:h-56 h-64 bg-gray-200 flex items-center justify-center">
@@ -204,7 +205,7 @@ export default function BlogClientPage(
                                         <div
                                             className="text-gray-600 text-sm mt-2  line-clamp-2 text-muted"
                                             dangerouslySetInnerHTML={{ __html: post.description }}
-                                            onClick={() => (window.location.href = `/blogDetail/${encodeURIComponent(post._id)}`)}
+                                            onClick={() => (window.location.href = `${post.slug}`)}
                                         />
                                     </div>
                                 ))}

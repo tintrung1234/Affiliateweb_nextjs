@@ -15,6 +15,7 @@ interface PostType {
   category: string;
   imageUrl: string;
   description: string;
+  slug: string;
 }
 
 export default function SearchWrapperClient({
@@ -79,7 +80,7 @@ export default function SearchWrapperClient({
                 <div
                   className="flex flex-col space-x-4 mb-6 cursor-pointer border border-gray-300 p-2 hover:shadow-lg transition-shadow duration-300"
                   data-aos="fade-right"
-                  onClick={() => (window.location.href = `/detail/${encodeURIComponent(Post._id)}`)}
+                  onClick={() => (window.location.href = `${Post.slug}`)}
                   key={index}
                 // onClick={() => {
                 //   handlePostsDetailClick(Post._id);

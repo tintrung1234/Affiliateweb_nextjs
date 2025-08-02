@@ -27,6 +27,7 @@ interface PostType {
     content: string;
     description: string;
     createdAt: Date;
+    slug: string;
 }
 
 interface AssetsType {
@@ -41,6 +42,7 @@ interface FormData {
     views: number | string;
     content: string;
     imageUrl: string;
+    slug: string;
 }
 
 interface ContextMenuState {
@@ -75,7 +77,8 @@ export default function PostForm() {
         category: '',
         views: 0,
         content: '',
-        imageUrl: ''
+        imageUrl: '',
+        slug: '',
     });
     const [postsState, setPostsState] = useState<PostType[]>([]);
     const [assets, setAssets] = useState<AssetsType[]>([]);
@@ -140,6 +143,7 @@ export default function PostForm() {
                         views: p.views || 0,
                         content: sanitizedContent,
                         imageUrl: p.imageUrl || '',
+                        slug: p.slug || '',
                     });
 
                     setPreview(p.imageUrl || DEFAULT_IMAGE);
@@ -157,6 +161,8 @@ export default function PostForm() {
                 views: 0,
                 content: '',
                 imageUrl: '',
+                slug: '',
+
             });
             setPreview(DEFAULT_IMAGE);
         }
@@ -235,6 +241,7 @@ export default function PostForm() {
                     category: selectedPost.category || '',
                     content: sanitizedContent,
                     imageUrl: selectedPost.imageUrl || '',
+                    slug: selectedPost.slug || '',
                 });
                 setPreview(selectedPost.imageUrl || DEFAULT_IMAGE);
             }
@@ -319,6 +326,7 @@ export default function PostForm() {
                 content: '',
                 category: '',
                 imageUrl: '',
+                slug: '',
             });
             setImageFile(null);
             setPreview(DEFAULT_IMAGE);
@@ -353,6 +361,7 @@ export default function PostForm() {
                 content: '',
                 category: '',
                 imageUrl: '',
+                slug: '',
             });
             setImageFile(null);
             setPreview(DEFAULT_IMAGE);
@@ -394,6 +403,7 @@ export default function PostForm() {
                             content: "",
                             category: "",
                             imageUrl: "",
+                            slug: "",
                         });
                     }}
                 >

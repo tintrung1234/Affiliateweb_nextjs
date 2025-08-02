@@ -19,14 +19,14 @@ interface PostType {
     metaTitle: string;
     metaDescription: string;
     metaKeywords: string;
-    metaURL: string;
+    slug: string;
 }
 
 interface FormData {
     metaTitle: string;
     metaDescription: string;
     metaKeywords: string;
-    metaURL: string;
+    slug: string;
 }
 
 export default function PostForm() {
@@ -40,7 +40,7 @@ export default function PostForm() {
         metaTitle: "",
         metaDescription: "",
         metaKeywords: "",
-        metaURL: "",
+        slug: "",
     });
     const [postsState, setPostsState] = useState<PostType[]>([]);
 
@@ -69,7 +69,7 @@ export default function PostForm() {
                         metaTitle: p.metaTitle || '',
                         metaDescription: p.metaDescription || '',
                         metaKeywords: p.metaKeywords || '',
-                        metaURL: p.metaURL || '',
+                        slug: p.slug || '',
                     });
                 })
                 .catch((err) => {
@@ -82,7 +82,7 @@ export default function PostForm() {
                 metaTitle: '',
                 metaDescription: '',
                 metaKeywords: '',
-                metaURL: ''
+                slug: ''
             });
         }
     }, [postId, selectedPostId, DOMAIN]);
@@ -109,18 +109,20 @@ export default function PostForm() {
                 metaTitle: selectedPost.metaTitle || '',
                 metaDescription: selectedPost.metaDescription || '',
                 metaKeywords: selectedPost.metaKeywords || "",
-                metaURL: selectedPost.metaURL || "",
+                slug: selectedPost.slug || "",
             });
         }
     }, [formTab, selectedPostId, postsState]);
 
     const handleSubmit = async () => {
         try {
+            const DOAMINWEB = process.env.NEXT_PUBLIC_URLWEBSITE;
+            const fullSlug = `${DOAMINWEB}/blogDetail/${formData.slug}`
             const data = new FormData();
             data.append('metaTitle', formData.metaTitle);
             data.append('metaDescription', formData.metaDescription);
             data.append('metaKeywords', formData.metaKeywords);
-            data.append('metaURL', formData.metaURL);
+            data.append('slug', fullSlug);
             const toastId = toast.loading('Đang cập nhật SEO...');
 
             await axios.put(`${DOMAIN}/api/posts/update/${selectedPostId}`, data, {
@@ -136,7 +138,7 @@ export default function PostForm() {
                 metaTitle: '',
                 metaDescription: '',
                 metaKeywords: '',
-                metaURL: ''
+                slug: ''
             });
 
             setSelectedPostId('');
@@ -201,10 +203,10 @@ export default function PostForm() {
                     <label className="font-bold block mb-2">Meta URL (SLUG)</label>
                     <textarea
                         className="w-full p-2 rounded bg-white border border-gray-300"
-                        name="metaURL"
-                        value={formData.metaURL || ""}
+                        name="slug"
+                        value={formData.slug || ""}
                         onChange={handleChange}
-                        placeholder="Ví dụ: /blog/ten-bai-viet"
+                        placeholder="Ví dụ: ten-bai-viet"
                     ></textarea>
                 </div>
 

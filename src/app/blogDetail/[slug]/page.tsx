@@ -16,6 +16,7 @@ interface PostType {
   imageUrl: string;
   views: number;
   createdAt: string;
+  slug: string;
   metaTitle: string;
   metaDescription: string;
   metaKeywords: string;
@@ -24,17 +25,17 @@ interface PostType {
 
 // Define the props type for the page
 type PageProps = {
-  params: Promise<{ id: string }>; // Use Promise for params
+  params: Promise<{ slug: string }>; // Use Promise for params
 };
 
 // Metadata generation function
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const { id } = await params; // Await the params Promise to get the id
+  const { slug } = await params; // Await the params Promise to get the id
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_HOSTDOMAIN}/api/posts/detail/${encodeURIComponent(id)}`,
+    `${process.env.NEXT_PUBLIC_HOSTDOMAIN}/api/posts/detail/${encodeURIComponent(slug)}`,
     {
       cache: "no-store",
     }
@@ -48,7 +49,7 @@ export async function generateMetadata({
 
   const post = await res.json();
 
-  const postUrl = `${process.env.NEXT_PUBLIC_URLWEBSITE}/blogDetail/${id}`;
+  // const postUrl = `${process.env.NEXT_PUBLIC_URLWEBSITE}/blogDetail/${slug}`;
   // const postDescription = post.description?.replace(/<[^>]+>/g, "").slice(0, 160);
 
   return {
@@ -76,16 +77,17 @@ export async function generateMetadata({
 
 // Page component
 export default async function BlogDetail({ params }: PageProps) {
-  const { id } = await params; // Await the params Promise to get the id
+  const { slug } = await params; // Await the params Promise to get the slug
 
   const postRes = await fetch(
-    `${DOMAIN}/api/posts/detail/${encodeURIComponent(id)}`,
+    `${DOMAIN}/api/posts/detail/${encodeURIComponent(slug)}`,
     {
       cache: "no-store",
     }
   );
 
   const post: PostType = await postRes.json();
+  console.log(post)
 
   return (
     <>
