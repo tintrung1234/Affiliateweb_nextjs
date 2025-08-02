@@ -67,10 +67,10 @@ const DEFAULT_IMAGE =
 export default function PostForm() {
     const DOMAIN = process.env.NEXT_PUBLIC_HOSTDOMAIN;
     const params = useParams();
-    const postId = Array.isArray(params.id) ? params.id[0] : params.id || '';
+    const postSlug = Array.isArray(params.slug) ? params.slug[0] : params.slug || '';
 
     const [formTab, setFormTab] = useState<'Create' | 'Edit' | 'SEO'>('Create');
-    const [selectedPostId, setSelectedPostId] = useState<string>('');
+    const [selectedPostSlug, setSelectedPostSlug] = useState<string>('');
     const [formData, setFormData] = useState<FormData>({
         title: '',
         description: '',
@@ -98,19 +98,18 @@ export default function PostForm() {
     const [categories, setCategories] = useState<CategoryType[]>([]);
 
     useEffect(() => {
-        if (postId) {
-            setSelectedPostId(postId);
+        if (postSlug) {
+            setSelectedPostSlug(postSlug);
         }
-    }, [postId]);
+    }, [postSlug]);
 
     // Fetch post details
     useEffect(() => {
-        if (postId || selectedPostId) {
-            const id = postId || selectedPostId;
+        if (postSlug || selectedPostSlug) {
+            const slug = postSlug || selectedPostSlug;
             setFormTab('Edit');
-            console.log(`${DOMAIN}/api/posts/detail/${id}`);
             axios
-                .get<PostType>(`${DOMAIN}/api/posts/detail/${id}`)
+                .get<PostType>(`${DOMAIN}/api/posts/detail/${slug}`)
                 .then((res) => {
                     const p = res.data; // 👈 lấy thẳng từ res.data
                     if (!p) {
@@ -162,11 +161,10 @@ export default function PostForm() {
                 content: '',
                 imageUrl: '',
                 slug: '',
-
             });
             setPreview(DEFAULT_IMAGE);
         }
-    }, [postId, selectedPostId, DOMAIN]);
+    }, [postSlug, selectedPostSlug, DOMAIN]);
 
     // Fetch all posts
     useEffect(() => {
@@ -216,8 +214,8 @@ export default function PostForm() {
 
     // Update form data when selecting a post in Edit or SEO mode
     useEffect(() => {
-        if ((formTab === 'Edit' || formTab === 'SEO') && selectedPostId) {
-            const selectedPost = postsState.find((p) => p._id === selectedPostId);
+        if ((formTab === 'Edit' || formTab === 'SEO') && selectedPostSlug) {
+            const selectedPost = postsState.find((p) => p.slug === selectedPostSlug);
             if (selectedPost) {
                 const sanitizedContent = sanitizeHtml(selectedPost.content, {
                     allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'iframe']),
@@ -241,12 +239,12 @@ export default function PostForm() {
                     category: selectedPost.category || '',
                     content: sanitizedContent,
                     imageUrl: selectedPost.imageUrl || '',
-                    slug: selectedPost.slug || '',
+                    slug: selectedPost.slug,
                 });
                 setPreview(selectedPost.imageUrl || DEFAULT_IMAGE);
             }
         }
-    }, [formTab, selectedPostId, postsState]);
+    }, [formTab, selectedPostSlug, postsState]);
 
     // Handle image preview
     useEffect(() => {
@@ -294,19 +292,20 @@ export default function PostForm() {
             data.append('views', formData.views.toString());
             data.append('content', formData.content);
             data.append('category', formData.category);
+            data.append('slug', formData.slug);
             if (imageFile) {
                 data.append('image', imageFile);
             }
 
-            const toastId = toast.loading(formTab === 'Edit' ? 'Đang cập nhật bài...' : 'Đang đăng bài...');
+            const toastSlug = toast.loading(formTab === 'Edit' ? 'Đang cập nhật bài...' : 'Đang đăng bài...');
 
-            if (formTab === 'Edit' && selectedPostId) {
-                await axios.put(`${DOMAIN}/api/posts/update/${selectedPostId}`, data, {
+            if (formTab === 'Edit' && selectedPostSlug) {
+                await axios.put(`${DOMAIN}/api/posts/update/${selectedPostSlug}`, data, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
                 });
-                toast.dismiss(toastId);
+                toast.dismiss(toastSlug);
                 toast.success('Cập nhật bài viết thành công!');
             } else {
                 await axios.post(`${DOMAIN}/api/posts/create`, data, {
@@ -314,7 +313,7 @@ export default function PostForm() {
                         'Content-Type': 'multipart/form-data',
                     },
                 });
-                toast.dismiss(toastId);
+                toast.dismiss(toastSlug);
                 toast.success('Đăng bài thành công!');
             }
 
@@ -330,7 +329,7 @@ export default function PostForm() {
             });
             setImageFile(null);
             setPreview(DEFAULT_IMAGE);
-            setSelectedPostId('');
+            setSelectedPostSlug('');
             setFormTab('Create');
         } catch (err) {
             console.error('Submit error:', err);
@@ -340,19 +339,19 @@ export default function PostForm() {
     };
 
     const handleDelete = async () => {
-        if (!selectedPostId) return;
+        if (!selectedPostSlug) return;
 
         const confirmed = window.confirm('Bạn có chắc chắn muốn xoá bài viết này?');
         if (!confirmed) return;
 
         try {
-            const toastId = toast.loading('Đang xoá bài...');
-            await axios.delete(`${DOMAIN}/api/posts/delete/${selectedPostId}`);
-            toast.dismiss(toastId);
+            const toastSlug = toast.loading('Đang xoá bài...');
+            await axios.delete(`${DOMAIN}/api/posts/delete/${selectedPostSlug}`);
+            toast.dismiss(toastSlug);
             toast.success('Xoá bài viết thành công!');
 
             // Reset form and edit state
-            setSelectedPostId('');
+            setSelectedPostSlug('');
             setFormTab('Create');
             setFormData({
                 title: '',
@@ -387,6 +386,10 @@ export default function PostForm() {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
         setFormData({ ...formData, [e.target.name]: e.target.value });
+
+    const handleURLChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+
     return (
         <>
             <ToastContainer />
@@ -395,7 +398,7 @@ export default function PostForm() {
                     className={`cursor-pointer ${formTab === "Create" && "underline"}`}
                     onClick={() => {
                         setFormTab("Create");
-                        setSelectedPostId("");
+                        setSelectedPostSlug("");
                         setFormData({
                             title: "",
                             description: "",
@@ -420,15 +423,15 @@ export default function PostForm() {
                 {formTab === "Edit" && (
                     <div>
                         <div>
-                            {postId && (
+                            {postSlug && (
                                 <span>Không được chọn bài viết khác</span>
                             )}
                         </div>
                         <select
                             className="w-full p-2 mt-1 rounded bg-white p-2"
-                            disabled={!!postId}
-                            value={selectedPostId}
-                            onChange={(e) => setSelectedPostId(e.target.value)}
+                            disabled={!!postSlug}
+                            value={selectedPostSlug}
+                            onChange={(e) => setSelectedPostSlug(e.target.value)}
                         >
                             <option value="">-- Chọn --</option>
                             {postsState.map((post) => (
@@ -535,6 +538,18 @@ export default function PostForm() {
                             </div>
                             <br></br>
                         </div>
+
+                        <div className="mb-4">
+                            <label className="font-bold block mb-2">Meta URL (SLUG)</label>
+                            <textarea
+                                className="w-full p-2 rounded bg-white border border-gray-300"
+                                name="slug"
+                                value={formData.slug || ""}
+                                onChange={handleURLChange}
+                                placeholder="Ví dụ: ten-bai-viet"
+                            ></textarea>
+                        </div>
+
                         <div>
                             <label className="font-bold block mb-2 mt-4">Chọn danh mục</label>
                             <select
@@ -580,7 +595,7 @@ export default function PostForm() {
                     <div className="text-center">
                         <button onClick={handleSubmit} className="bg-yellow-400 rounded px-4 py-2 font-bold cursor-pointer hover:bg-yellow-600">Lưu</button>
                     </div>
-                    {formTab === "Edit" && selectedPostId && (
+                    {formTab === "Edit" && selectedPostSlug && (
                         <div className="text-center ml-3">
                             <button
                                 onClick={handleDelete}

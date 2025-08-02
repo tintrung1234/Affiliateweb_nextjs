@@ -33,9 +33,8 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params; // Await the params Promise to get the id
-
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_HOSTDOMAIN}/api/posts/detail/${encodeURIComponent(slug)}`,
+    `${process.env.NEXT_PUBLIC_HOSTDOMAIN}/api/posts/detail/${slug}`,
     {
       cache: "no-store",
     }
@@ -52,6 +51,9 @@ export async function generateMetadata({
   // const postUrl = `${process.env.NEXT_PUBLIC_URLWEBSITE}/blogDetail/${slug}`;
   // const postDescription = post.description?.replace(/<[^>]+>/g, "").slice(0, 160);
 
+  const DOAMINWEB = process.env.NEXT_PUBLIC_URLWEBSITE;
+  const fullSlug = `${DOAMINWEB}/blogDetail/${post.slug}`
+
   return {
     title: post.title,
     description: post.description?.slice(0, 160),
@@ -59,7 +61,7 @@ export async function generateMetadata({
     openGraph: {
       title: post.metaTitle,
       description: post.metaDescription,
-      url: post.metaURL,
+      url: fullSlug,
       type: "article",
       siteName: "Tên trang web của bạn",
       images: post.imageUrl

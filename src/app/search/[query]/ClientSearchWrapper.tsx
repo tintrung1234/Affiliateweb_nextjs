@@ -14,6 +14,7 @@ interface PostType {
   category: string;
   imageUrl: string;
   description: string;
+  slug: string;
 }
 
 interface ProductType {
@@ -30,6 +31,8 @@ export default function SearchWrapperClient({
 }: {
   query: string;
 }) {
+  const DOAMINWEB = process.env.NEXT_PUBLIC_URLWEBSITE;
+
   const [products, setProducts] = useState<ProductType[]>([]);
   const [posts, setPosts] = useState<PostType[]>([]);
 
@@ -148,7 +151,8 @@ export default function SearchWrapperClient({
                 <div
                   className="flex flex-col space-x-4 mb-6 cursor-pointer border border-gray-300 p-2 hover:shadow-lg transition-shadow duration-300"
                   data-aos="fade-right"
-                  onClick={() => (window.location.href = `/detail/${encodeURIComponent(Post._id)}`)}
+                  onClick={() => (window.location.href = `${DOAMINWEB}/blogDetail/${Post.slug}`)}
+
                   key={index}
                 >
                   {/* <div className={`${type === "post" ? 'h-full' : 'h-20'}`}> */}
@@ -171,7 +175,7 @@ export default function SearchWrapperClient({
                       {Post.category}
                     </span>
 
-                    <ToggleFavoritePost postId={Post._id} postTitle={Post.title}/>
+                    <ToggleFavoritePost postId={Post._id} postTitle={Post.title} />
 
                     <div
                       className="text-gray-600 text-sm mt-2  line-clamp-2 text-muted"

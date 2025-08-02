@@ -13,6 +13,7 @@ interface PostType {
     views: number;
     content: string;
     description: string;
+    slug: string;
     createdAt: Date
 }
 
@@ -67,14 +68,14 @@ export default function Admin_ShowAllPosts() {
     const handleEdit = () => {
         if (!contextMenu.post) return;
         router.push(
-            `/admin/Posts/editPosts/${contextMenu.post._id}`
+            `/admin/Posts/editPosts/${contextMenu.post.slug}`
         );
     };
 
     const handleEditSEO = () => {
         if (!contextMenu.post) return;
         router.push(
-            `/admin/Posts/editSEO/${contextMenu.post._id}`
+            `/admin/Posts/editSEO/${contextMenu.post.slug}`
         );
     };
 

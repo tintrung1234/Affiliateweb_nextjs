@@ -56,8 +56,10 @@ export default function BlogClientPage(
 
     const router = useRouter();
 
+    const DOAMINWEB = process.env.NEXT_PUBLIC_URLWEBSITE;
+
     const handleDetailClick = (slug: string) => {
-        router.push(slug);
+        router.push(`${DOAMINWEB}/blogDetail/${slug}`);
     };
 
     return (
@@ -193,7 +195,7 @@ export default function BlogClientPage(
                                                         src={post.imageUrl}
                                                         className="sm:h-56 lg:h-64 object-cover hover:scale-110 transition-transform duration-300"
                                                         alt={post.title}
-                                                        onClick={() => (window.location.href = `${post.slug}`)}
+                                                        onClick={() => (window.location.href = `${DOAMINWEB}/blogDetail/${post.slug}`)}
                                                     />
                                                 </div>
                                             ) : <div className="sm:h-56 h-64 bg-gray-200 flex items-center justify-center">
@@ -205,7 +207,7 @@ export default function BlogClientPage(
                                         <div
                                             className="text-gray-600 text-sm mt-2  line-clamp-2 text-muted"
                                             dangerouslySetInnerHTML={{ __html: post.description }}
-                                            onClick={() => (window.location.href = `${post.slug}`)}
+                                            onClick={() => (window.location.href = `${DOAMINWEB}/blogDetail/${post.slug}`)}
                                         />
                                     </div>
                                 ))}

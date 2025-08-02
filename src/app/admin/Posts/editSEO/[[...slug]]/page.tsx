@@ -32,32 +32,32 @@ interface FormData {
 export default function PostForm() {
     const DOMAIN = process.env.NEXT_PUBLIC_HOSTDOMAIN;
     const params = useParams();
-    const postId = Array.isArray(params.id) ? params.id[0] : params.id || '';
+    const postSlug = Array.isArray(params.slug) ? params.slug[0] : params.slug || '';
 
     const [formTab, setFormTab] = useState<'Create' | 'Edit' | 'SEO'>('Create');
-    const [selectedPostId, setSelectedPostId] = useState<string>('');
+    const [selectedPostSlug, setSelectedPostSlug] = useState<string>('');
     const [formData, setFormData] = useState<FormData>({
         metaTitle: "",
         metaDescription: "",
         metaKeywords: "",
         slug: "",
     });
+
     const [postsState, setPostsState] = useState<PostType[]>([]);
 
     useEffect(() => {
-        if (postId) {
-            setSelectedPostId(postId);
+        if (postSlug) {
+            setSelectedPostSlug(postSlug);
         }
-    }, [postId]);
+    }, [postSlug]);
 
     // Fetch post details
     useEffect(() => {
-        if (postId || selectedPostId) {
-            const id = postId || selectedPostId;
+        if (postSlug || selectedPostSlug) {
+            const slug = postSlug || selectedPostSlug;
             setFormTab('Edit');
-            console.log(`${DOMAIN}/api/posts/detail/${id}`);
             axios
-                .get<PostType>(`${DOMAIN}/api/posts/detail/${id}`)
+                .get<PostType>(`${DOMAIN}/api/posts/detail/${slug}`)
                 .then((res) => {
                     const p = res.data;
                     if (!p) {
@@ -85,7 +85,7 @@ export default function PostForm() {
                 slug: ''
             });
         }
-    }, [postId, selectedPostId, DOMAIN]);
+    }, [postSlug, selectedPostSlug, DOMAIN]);
 
     // Fetch all posts
     useEffect(() => {
@@ -103,7 +103,7 @@ export default function PostForm() {
 
     // Update form data when selecting a post in Edit or SEO mode
     useEffect(() => {
-        const selectedPost = postsState.find((p) => p._id === selectedPostId);
+        const selectedPost = postsState.find((p) => p.slug === selectedPostSlug);
         if (selectedPost) {
             setFormData({
                 metaTitle: selectedPost.metaTitle || '',
@@ -112,25 +112,23 @@ export default function PostForm() {
                 slug: selectedPost.slug || "",
             });
         }
-    }, [formTab, selectedPostId, postsState]);
+    }, [formTab, selectedPostSlug, postsState]);
 
     const handleSubmit = async () => {
         try {
-            const DOAMINWEB = process.env.NEXT_PUBLIC_URLWEBSITE;
-            const fullSlug = `${DOAMINWEB}/blogDetail/${formData.slug}`
             const data = new FormData();
             data.append('metaTitle', formData.metaTitle);
             data.append('metaDescription', formData.metaDescription);
             data.append('metaKeywords', formData.metaKeywords);
-            data.append('slug', fullSlug);
-            const toastId = toast.loading('Đang cập nhật SEO...');
+            data.append('slug', formData.slug);
+            const toastSlug = toast.loading('Đang cập nhật SEO...');
 
-            await axios.put(`${DOMAIN}/api/posts/update/${selectedPostId}`, data, {
+            await axios.put(`${DOMAIN}/api/posts/update/${selectedPostSlug}`, data, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            toast.dismiss(toastId);
+            toast.dismiss(toastSlug);
             toast.success('Cập nhật bài viết thành công!');
 
             // Reset state
@@ -141,7 +139,7 @@ export default function PostForm() {
                 slug: ''
             });
 
-            setSelectedPostId('');
+            setSelectedPostSlug('');
             setFormTab('Create');
         } catch (err) {
             console.error('Submit error:', err);
@@ -160,23 +158,24 @@ export default function PostForm() {
             <div className="mt-6 p-4 border rounded bg-white shadow-sm">
                 <h2 className="text-lg font-bold mb-4 text-black">SEO Metadata</h2>
                 <div>
-                    {postId && (
+                    {postSlug && (
                         <span>Không được chọn bài viết khác</span>
                     )}
                 </div>
                 <select
-                    className="w-full p-2 mt-1 rounded bg-white p-2"
-                    disabled={!!postId}
-                    value={selectedPostId}
-                    onChange={(e) => setSelectedPostId(e.target.value)}
+                    className="w-full p-2 mt-1 rounded bg-white"
+                    disabled={!!postSlug}
+                    value={postSlug || selectedPostSlug}
+                    onChange={(e) => setSelectedPostSlug(e.target.value)}
                 >
                     <option value="">-- Chọn --</option>
                     {postsState.map((post) => (
-                        <option key={post._id} value={post._id}>
+                        <option key={post._id} value={post.slug}>
                             {post.title}
                         </option>
                     ))}
                 </select>
+
                 <div className="mb-4">
                     <label className="font-bold block mb-2">Meta Title</label>
                     <input
@@ -209,7 +208,6 @@ export default function PostForm() {
                         placeholder="Ví dụ: ten-bai-viet"
                     ></textarea>
                 </div>
-
 
                 <div className="mb-4">
                     <label className="font-bold block mb-2">Meta Keywords</label>

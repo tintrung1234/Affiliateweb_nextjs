@@ -67,23 +67,25 @@ export default function ToggleFavoritePostDetail({ postId }: FavoriteTogglePost)
     const isPostFavorite = favorite.includes(postId);
 
     return (
-        <div className='flex sm:flex-row justify-between items-center mt-3 mb-2'
-            onClick={() => (window.location.href = `/blogDetail/${encodeURIComponent(postId)}`)}
-        >
+        <>
             <ToastContainer />
-            <div
-                onClick={(e) => {
-                    e.stopPropagation(); // Ngăn sự kiện lan lên thẻ cha
-                    toggle(); // Gọi hàm toggle yêu thích
-                }}
-                className='cursor-pointer transition-colors duration-300'
+            <div className='flex sm:flex-row justify-between items-center mt-3 mb-2'
+                onClick={() => (window.location.href = `/blogDetail/${encodeURIComponent(postId)}`)}
             >
-                {isPostFavorite ? (
-                    <IoMdHeart className='w-7 h-7 text-red-500 transition-colors duration-200' />
-                ) : (
-                    <IoMdHeartEmpty className='w-7 h-7 text-gray-600 hover:text-red-500 transition-colors duration-200' />
-                )}
+                <div
+                    onClick={(e) => {
+                        e.stopPropagation(); // Ngăn sự kiện lan lên thẻ cha
+                        toggle(); // Gọi hàm toggle yêu thích
+                    }}
+                    className='cursor-pointer transition-colors duration-300'
+                >
+                    {isPostFavorite ? (
+                        <IoMdHeart className='w-7 h-7 text-red-500 transition-colors duration-200' />
+                    ) : (
+                        <IoMdHeartEmpty className='w-7 h-7 text-gray-600 hover:text-red-500 transition-colors duration-200' />
+                    )}
+                </div>
             </div>
-        </div>
+        </>
     )
 }

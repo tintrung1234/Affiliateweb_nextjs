@@ -23,6 +23,8 @@ export default function SearchWrapperClient({
 }: {
   query: string;
 }) {
+  const DOAMINWEB = process.env.NEXT_PUBLIC_URLWEBSITE;
+
   const [posts, setPosts] = useState<PostType[]>([]);
 
   const postsPerPage = 10;
@@ -69,7 +71,7 @@ export default function SearchWrapperClient({
       <div className="lg:flex">
         {/* Blog session */}
         <div className={`px-4 w-full px-20 max-w-6xl mx-auto sm:w-full`}>
-        {/* <div className={`px-4 lg:w-1/4 sm:w-full`}> */}
+          {/* <div className={`px-4 lg:w-1/4 sm:w-full`}> */}
           {/* <h2 className={`text-xl font-bold mb-4 text-black ${type === "post" ? 'hidden' : 'text-black'}`}>Bài viết liên quan</h2> */}
           <div className="grid lg:grid-cols-1 md:grid-cols-1 gap-2">
             {/* {loading ? (
@@ -80,7 +82,7 @@ export default function SearchWrapperClient({
                 <div
                   className="flex flex-col space-x-4 mb-6 cursor-pointer border border-gray-300 p-2 hover:shadow-lg transition-shadow duration-300"
                   data-aos="fade-right"
-                  onClick={() => (window.location.href = `${Post.slug}`)}
+                  onClick={() => (window.location.href = `${DOAMINWEB}/blogDetail/${Post.slug}`)}
                   key={index}
                 // onClick={() => {
                 //   handlePostsDetailClick(Post._id);
@@ -106,7 +108,7 @@ export default function SearchWrapperClient({
                       {Post.category}
                     </span>
 
-                    <ToggleFavoritePost postId={Post._id} postTitle={Post.title}/>
+                    <ToggleFavoritePost postId={Post._id} postTitle={Post.title} />
 
                     <div
                       className="text-gray-600 text-sm mt-2  line-clamp-2 text-muted"

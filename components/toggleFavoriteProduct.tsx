@@ -65,19 +65,21 @@ export default function ToggleFavorite({ productId, productTitle }: FavoriteTogg
     const isProductFavorite = favorite.includes(productId);
 
     return (
-        <div className='flex sm:flex-row justify-between w-full items-center mt-3 mb-2'>
+        <>
             <ToastContainer />
-            <h2 className="text-black font-bold text-[18px] line-clamp-1 text-muted">{productTitle}</h2>
-            <div onClick={(e) => {
-                e.stopPropagation(); // Ngăn sự kiện lan lên thẻ cha
-                toggle(); // Gọi hàm toggle yêu thích
-            }} className='cursor-pointer transition-colors duration-300'>
-                {isProductFavorite ? (
-                    <IoMdHeart className='w-7 h-7 text-red-500 transition-colors duration-200' />
-                ) : (
-                    <IoMdHeartEmpty className='w-7 h-7 text-gray-600 hover:text-red-500 transition-colors duration-200' />
-                )}
+            <div className='flex sm:flex-row justify-between w-full items-center mt-3 mb-2'>
+                <h2 className="text-black font-bold text-[18px] line-clamp-1 text-muted">{productTitle}</h2>
+                <div onClick={(e) => {
+                    e.stopPropagation(); // Ngăn sự kiện lan lên thẻ cha
+                    toggle(); // Gọi hàm toggle yêu thích
+                }} className='cursor-pointer transition-colors duration-300'>
+                    {isProductFavorite ? (
+                        <IoMdHeart className='w-7 h-7 text-red-500 transition-colors duration-200' />
+                    ) : (
+                        <IoMdHeartEmpty className='w-7 h-7 text-gray-600 hover:text-red-500 transition-colors duration-200' />
+                    )}
+                </div>
             </div>
-        </div>
+        </>
     )
 }
