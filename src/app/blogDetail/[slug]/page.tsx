@@ -3,6 +3,7 @@ import ProductRelate from "./productRelate";
 import PostRelate from "./postRelate";
 import type { Metadata } from "next";
 import ToggleFavoritePostDetail from "../../../../components/toggleFavoritePostDetail";
+import IncreaseViewOnClient from "../../../../components/increaseViews";
 
 const DOMAIN = process.env.NEXT_PUBLIC_HOSTDOMAIN;
 const WEBDOMAIN = process.env.NEXT_PUBLIC_URLWEBSITE;
@@ -33,6 +34,7 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params; // Await the params Promise to get the id
+
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_HOSTDOMAIN}/api/posts/detail/${slug}`,
     {
@@ -81,6 +83,7 @@ export async function generateMetadata({
 export default async function BlogDetail({ params }: PageProps) {
   const { slug } = await params; // Await the params Promise to get the slug
 
+  //api get detail
   const postRes = await fetch(
     `${DOMAIN}/api/posts/detail/${encodeURIComponent(slug)}`,
     {
@@ -89,7 +92,6 @@ export default async function BlogDetail({ params }: PageProps) {
   );
 
   const post: PostType = await postRes.json();
-  console.log(post)
 
   return (
     <>
@@ -164,6 +166,7 @@ export default async function BlogDetail({ params }: PageProps) {
         {/* Post relate */}
         <PostRelate categoryName={post.category} />
       </div>
+      <IncreaseViewOnClient slug={slug} />
     </>
   );
 }
