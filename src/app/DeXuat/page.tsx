@@ -16,6 +16,7 @@ interface ProductType {
     price: number;
     views?: number;
     rating?: number;
+    URL: string;
 }
 
 export default function SoSanh() {
@@ -36,10 +37,11 @@ export default function SoSanh() {
     }, []);
 
     const SuggestedProduct = ({ product }: { product: ProductType }) => {
-        const { imageUrl, title, description, price, views = 0, rating = 5 } = product;
+        const { imageUrl, title, description, price, views = 0, rating = 5, URL } = product;
 
         return (
-            <div className="flex sm:flex-row items-start space-x-2 sm:space-x-3 lg:space-x-4 mb-4 sm:mb-5 lg:mb-6 cursor-pointer">
+            <div className="flex sm:flex-row items-start space-x-2 sm:space-x-3 lg:space-x-4 mb-4 sm:mb-5 lg:mb-6 cursor-pointer"
+                onClick={() => window.open(URL || "_blank")}>
                 {/* Hình ảnh */}
                 <div className="relative bg-gray-300 rounded-lg shrink-0 w-24 h-24 sm:w-40 sm:h-24 lg:w-36 lg:h-36">
                     {imageUrl ? (

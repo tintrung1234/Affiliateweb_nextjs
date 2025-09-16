@@ -71,7 +71,7 @@ export default function NavBar() {
 
     return (
         <div className="w-full flex justify-center z-20 px-4 sm:px-6 lg:px-8">
-            <nav id="navbar" className="navbar mt-2 fixed content-center flex items-center px-4 sm:px-5 lg:px-6 rounded-[15px] w-full max-full transition-all duration-500 ease-in-out shadow-xl z-20">
+            <nav id="navbar" className="navbar mt-2 fixed content-center flex color-black items-center px-4 sm:px-5 lg:px-6 rounded-[15px] w-full max-full transition-all duration-500 ease-in-out shadow-xl z-9990">
                 <div className="flex w-full items-center justify-between">
                     <Link href="/" className="text-white text-lg sm:text-xl lg:text-2xl font-bold textcss cursor-pointer hover:scale-110 transition-transform duration-300">DealHawk</Link>
                     <div className="sm:hidden">
@@ -87,7 +87,7 @@ export default function NavBar() {
                     </div>
                     <div className={`flex-col sm:flex-row items-center text-xs w-full sm:w-auto justify-end space-y-2 sm:space-y-0 sm:space-x-4 lg:space-x-6 ${isMobileMenuOpen ? 'flex' : 'hidden sm:flex'} mt-4 sm:mt-0 bg-gray-900 sm:bg-transparent p-4 sm:p-0 rounded-lg sm:rounded-none absolute sm:static top-10 left-0 right-0 sm:top-auto sm:left-auto`}>
                         <div className="relative h-8 w-40 ml-3 flex items-center justify-end transition-all duration-300 focus-within:w-60">
-                            <SearchBox type="1"/>
+                            <SearchBox type="1" />
                         </div>
 
                         {/* Dropdown */}

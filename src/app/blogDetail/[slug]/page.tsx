@@ -42,6 +42,7 @@ export async function generateMetadata({
     }
   );
 
+
   if (!res.ok) {
     return {
       title: "Bài viết không tồn tại",
@@ -85,13 +86,13 @@ export default async function BlogDetail({ params }: PageProps) {
 
   //api get detail
   const postRes = await fetch(
-    `${DOMAIN}/api/posts/detail/${encodeURIComponent(slug)}`,
+    `${DOMAIN}/api/posts/detail/${slug}`,
     {
       cache: "no-store",
     }
   );
-
   const post: PostType = await postRes.json();
+
 
   return (
     <>
@@ -130,7 +131,11 @@ export default async function BlogDetail({ params }: PageProps) {
                 {/* Nội dung HTML từ Editor */}
                 <div
                   className="text-gray-800 leading-relaxed text-[15px] space-y-4 mt-2"
-                  dangerouslySetInnerHTML={{ __html: post.description }}
+                  dangerouslySetInnerHTML={{
+                    __html: post?.description && typeof post.description === "string"
+                      ? post.description
+                      : "",
+                  }}
                 />
 
                 {post.imageUrl && (
@@ -152,7 +157,9 @@ export default async function BlogDetail({ params }: PageProps) {
                 <div
                   className="text-gray-800 leading-relaxed text-[15px] space-y-4 mt-2"
                   dangerouslySetInnerHTML={{
-                    __html: typeof post.content === "string" ? post.content : "",
+                    __html: post?.content && typeof post.content === "string"
+                      ? post.content
+                      : "",
                   }}
                 />
               </div>

@@ -51,7 +51,7 @@ export default function ScrollProduct({
         return <p className="text-center text-gray-500">Không có sản phẩm để hiển thị</p>;
     }
 
-
+    console.log(productsByCategory)
     return (
         <>
             {categories.map((category, idx) => {

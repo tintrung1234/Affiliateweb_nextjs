@@ -17,6 +17,7 @@ interface Product {
     views: number;
     rating: number;
     imageUrl: string;
+    URL: string;
 }
 
 export default function TopDeal() {
@@ -66,7 +67,8 @@ export default function TopDeal() {
                                 data-aos-duration="600"
                                 data-aos-easing="ease-in-out"
                             >
-                                <div className=''>
+                                <div className=''
+                                    onClick={() => window.open(product.URL || "_blank")}>
                                     <div className='w-full h-40 relative'>
                                         {product.imageUrl ? (
                                             <Image

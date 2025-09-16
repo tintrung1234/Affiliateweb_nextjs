@@ -69,6 +69,8 @@ export default function PostForm() {
     const params = useParams();
     const postSlug = Array.isArray(params.slug) ? params.slug[0] : params.slug || '';
 
+
+
     const [formTab, setFormTab] = useState<'Create' | 'Edit' | 'SEO'>('Create');
     const [selectedPostSlug, setSelectedPostSlug] = useState<string>('');
     const [formData, setFormData] = useState<FormData>({
@@ -111,7 +113,7 @@ export default function PostForm() {
             axios
                 .get<PostType>(`${DOMAIN}/api/posts/detail/${slug}`)
                 .then((res) => {
-                    const p = res.data; // 👈 lấy thẳng từ res.data
+                    const p = res.data; // lấy thẳng từ res.data
                     if (!p) {
                         toast.error('Không tìm thấy bài viết');
                         return;
@@ -435,7 +437,7 @@ export default function PostForm() {
                         >
                             <option value="">-- Chọn --</option>
                             {postsState.map((post) => (
-                                <option key={post._id} value={post._id}>
+                                <option key={post._id} value={post.slug}>
                                     {post.title}
                                 </option>
                             ))}

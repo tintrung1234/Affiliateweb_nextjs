@@ -136,10 +136,6 @@ const SearchBox: React.FC<SearchBoxProps> = ({
                 <h3 className="text-sm font-medium text-gray-900 truncate">
                   {product.title}
                 </h3>
-                <p
-                  className="text-xs text-gray-600 truncate"
-                  dangerouslySetInnerHTML={{ __html: product.description }}
-                />
                 <div className="font-bold flex text-xs mt-1">
                   <p className="mr-2 text-black">Giá tiền:</p>
                   <p className="text-red-500">{product.price}</p>

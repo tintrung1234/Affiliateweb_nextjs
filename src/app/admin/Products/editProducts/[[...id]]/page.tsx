@@ -174,6 +174,7 @@ export default function ProductForm() {
             if (imageFile) {
                 data.append("image", imageFile);
             }
+            data.append("URL", formData.URL);
 
             const toastId = toast.loading(isEdit ? "Đang cập nhật sản phẩm..." : "Đang đăng sản phẩm...");
 

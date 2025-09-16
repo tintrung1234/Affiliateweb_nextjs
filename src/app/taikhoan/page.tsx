@@ -25,11 +25,13 @@ interface User {
 interface Product {
     _id: string;
     title: string;
+    URL: string;
 }
 
 interface Post {
     _id: string;
     title: string;
+    slug: string;
 }
 
 const DOMAIN = process.env.NEXT_PUBLIC_HOSTDOMAIN ?? '';
@@ -310,7 +312,7 @@ export default function TaiKhoan() {
                                         <h3 className="text-[18px] font-bold text-black">{post.title}</h3>
                                         <div className='flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-3'>
                                             <h3 className='text-[14px] justify-center font-bold text-black underline cursor-pointer'
-                                                onClick={() => (window.location.href = `/detail/${encodeURIComponent(post._id)}`)}
+                                                onClick={() => (window.location.href = `/blogDetail/${encodeURIComponent(post.slug)}`)}
                                             >Xem chi tiết</h3>
                                             <button className="px-2 py-1 red cursor-pointer transition-color duration-300 rounded-lg"
                                                 onClick={() => handleRemoveFromFavoritePost(post._id)}>
@@ -331,7 +333,8 @@ export default function TaiKhoan() {
                                 <div key={index} className="bg-white w-full rounded-lg mt-4 flex flex-col sm:flex-row justify-between items-center p-3">
                                     <h3 className="text-[18px] font-bold text-black">{product.title}</h3>
                                     <div className='flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-3'>
-                                        <h3 className='text-[14px] justify-center font-bold text-black underline cursor-pointer'>Xem chi tiết</h3>
+                                        <h3 className='text-[14px] justify-center font-bold text-black underline cursor-pointer'
+                                            onClick={() => window.open(product.URL || "_blank")}>Xem chi tiết</h3>
                                         <button className="px-2 py-1 red cursor-pointer transition-color duration-300 rounded-lg"
                                             onClick={() => handleRemoveFromFavoriteProduct(product._id)}>
                                             <h3 className="font-bold text-[14px]">Xóa</h3>

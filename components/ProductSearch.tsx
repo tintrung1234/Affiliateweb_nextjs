@@ -19,11 +19,10 @@ const Products = ({ id, category, title, price, imageUrl, URL }: ProductProps) =
     <div
       className="flex flex-col space-x-4 mb-6 cursor-pointer border border-gray-300 p-2 transition-shadow duration-300"
       data-aos="fade-right"
+      onClick={() => window.open(URL, "_blank")}
     >
       <ToastContainer />
-      <div className="overflow-hidden w-full"
-        onClick={() => window.open(URL, "_blank")}
-      >
+      <div className="overflow-hidden w-full">
         <div className="relative w-full h-64 rounded-xl overflow-hidden bg-gray-100">
           {imageUrl ? (
             <Image
@@ -40,7 +39,7 @@ const Products = ({ id, category, title, price, imageUrl, URL }: ProductProps) =
         </div>
 
       </div>
-      <div className="mt-2 z-9999">
+      <div className="mt-2">
         <span className="text-stone-600 text-sm font-semibold">
           {category}
         </span>
