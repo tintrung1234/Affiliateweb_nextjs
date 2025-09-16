@@ -227,7 +227,7 @@ export default function ProductForm() {
         try {
             const toastId = toast.loading("Đang xoá bài...");
 
-            await axios.delete(`${DOMAIN}api/products/delete/${selectedProductId}`);
+            await axios.delete(`${DOMAIN}/api/products/delete/${selectedProductId}`);
 
             toast.dismiss(toastId);
             toast.success("Xoá sản phẩm thành công!");
